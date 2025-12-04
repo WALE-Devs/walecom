@@ -1,0 +1,376 @@
+[
+{
+  "model": "products.category",
+  "pk": 1,
+  "fields": {
+    "name": "Calzado",
+    "description": "Descr. Calzado",
+    "parent": null
+  }
+},
+{
+  "model": "products.category",
+  "pk": 2,
+  "fields": {
+    "name": "Zapatos",
+    "description": "Descr. Zapatos",
+    "parent": 1
+  }
+},
+{
+  "model": "products.category",
+  "pk": 3,
+  "fields": {
+    "name": "Sandalias",
+    "description": "Descr. sandalias",
+    "parent": 1
+  }
+},
+{
+  "model": "products.category",
+  "pk": 4,
+  "fields": {
+    "name": "Zapatillas",
+    "description": "Descr. zapatillas",
+    "parent": 1
+  }
+},
+{
+  "model": "products.attribute",
+  "pk": 1,
+  "fields": {
+    "name": "Calzado"
+  }
+},
+{
+  "model": "products.attribute",
+  "pk": 2,
+  "fields": {
+    "name": "Color"
+  }
+},
+{
+  "model": "products.attribute",
+  "pk": 3,
+  "fields": {
+    "name": "Talla"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 1,
+  "fields": {
+    "attribute": 1,
+    "value": "35",
+    "sku_code": "35"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 2,
+  "fields": {
+    "attribute": 1,
+    "value": "36",
+    "sku_code": "36"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 3,
+  "fields": {
+    "attribute": 1,
+    "value": "37",
+    "sku_code": "37"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 4,
+  "fields": {
+    "attribute": 1,
+    "value": "38",
+    "sku_code": "38"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 5,
+  "fields": {
+    "attribute": 1,
+    "value": "39",
+    "sku_code": "39"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 6,
+  "fields": {
+    "attribute": 1,
+    "value": "40",
+    "sku_code": "40"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 7,
+  "fields": {
+    "attribute": 1,
+    "value": "41",
+    "sku_code": "41"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 8,
+  "fields": {
+    "attribute": 1,
+    "value": "42",
+    "sku_code": "42"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 9,
+  "fields": {
+    "attribute": 1,
+    "value": "43",
+    "sku_code": "43"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 10,
+  "fields": {
+    "attribute": 1,
+    "value": "44",
+    "sku_code": "44"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 11,
+  "fields": {
+    "attribute": 2,
+    "value": "Rojo",
+    "sku_code": "RED"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 12,
+  "fields": {
+    "attribute": 2,
+    "value": "Verde",
+    "sku_code": "GREEN"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 13,
+  "fields": {
+    "attribute": 2,
+    "value": "Azul",
+    "sku_code": "BLUE"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 14,
+  "fields": {
+    "attribute": 2,
+    "value": "Amarillo",
+    "sku_code": "YELLOW"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 15,
+  "fields": {
+    "attribute": 2,
+    "value": "Negro",
+    "sku_code": "BLACK"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 16,
+  "fields": {
+    "attribute": 2,
+    "value": "Blanco",
+    "sku_code": "WHITE"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 17,
+  "fields": {
+    "attribute": 3,
+    "value": "XS",
+    "sku_code": "XS"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 18,
+  "fields": {
+    "attribute": 3,
+    "value": "S",
+    "sku_code": "S"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 19,
+  "fields": {
+    "attribute": 3,
+    "value": "M",
+    "sku_code": "M"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 20,
+  "fields": {
+    "attribute": 3,
+    "value": "L",
+    "sku_code": "L"
+  }
+},
+{
+  "model": "products.attributevalue",
+  "pk": 21,
+  "fields": {
+    "attribute": 3,
+    "value": "XL",
+    "sku_code": "XL"
+  }
+},
+{
+  "model": "products.product",
+  "pk": 2,
+  "fields": {
+    "name": "Sandalia el patito",
+    "description": "Desc. sandalia el patito",
+    "base_sku": "SEP",
+    "category": 3,
+    "default_currency": "PEN",
+    "default_price": "40.00",
+    "default_stock": 50
+  }
+},
+{
+  "model": "products.product",
+  "pk": 3,
+  "fields": {
+    "name": "Vans el Skater Feliz",
+    "description": "Desc. Vans el skate feliz",
+    "base_sku": "VSF",
+    "category": 4,
+    "default_currency": "PEN",
+    "default_price": "200.00",
+    "default_stock": 0
+  }
+},
+{
+  "model": "products.productvariant",
+  "pk": 2,
+  "fields": {
+    "product": 2,
+    "sku": null,
+    "price": "40.00",
+    "currency": "PEN",
+    "stock": 50,
+    "attributes": []
+  }
+},
+{
+  "model": "products.productvariant",
+  "pk": 3,
+  "fields": {
+    "product": 3,
+    "sku": "VSF-40-RED",
+    "price": null,
+    "currency": "PEN",
+    "stock": 20,
+    "attributes": [
+      6,
+      11
+    ]
+  }
+},
+{
+  "model": "products.productvariant",
+  "pk": 4,
+  "fields": {
+    "product": 3,
+    "sku": "VSF-40-BLUE",
+    "price": null,
+    "currency": "PEN",
+    "stock": 30,
+    "attributes": [
+      6,
+      13
+    ]
+  }
+},
+{
+  "model": "products.productvariant",
+  "pk": 5,
+  "fields": {
+    "product": 3,
+    "sku": "VSF-40-BLACK",
+    "price": null,
+    "currency": "PEN",
+    "stock": 40,
+    "attributes": [
+      6,
+      15
+    ]
+  }
+},
+{
+  "model": "products.productvariant",
+  "pk": 6,
+  "fields": {
+    "product": 3,
+    "sku": "VSF-43-RED",
+    "price": "210.00",
+    "currency": "PEN",
+    "stock": 20,
+    "attributes": [
+      9,
+      11
+    ]
+  }
+},
+{
+  "model": "products.productvariant",
+  "pk": 7,
+  "fields": {
+    "product": 3,
+    "sku": "VSF-43-BLUE",
+    "price": "210.00",
+    "currency": "PEN",
+    "stock": 30,
+    "attributes": [
+      9,
+      13
+    ]
+  }
+},
+{
+  "model": "products.productvariant",
+  "pk": 8,
+  "fields": {
+    "product": 3,
+    "sku": "VSF-43-BLACK",
+    "price": "210.00",
+    "currency": "PEN",
+    "stock": 40,
+    "attributes": [
+      9,
+      15
+    ]
+  }
+}
+]
