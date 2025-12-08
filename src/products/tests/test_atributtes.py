@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
 
-from .models import Category, Attribute, AttributeValue, Product, ProductVariant
+from products.models import Category, Attribute, AttributeValue, Product, ProductVariant
 
 
 @pytest.mark.django_db

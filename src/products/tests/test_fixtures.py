@@ -1,5 +1,5 @@
 import pytest
-from .models import Category, Product
+from products.models import Category, Product
 
 
 @pytest.fixture()#scope='function')
