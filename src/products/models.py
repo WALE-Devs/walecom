@@ -56,6 +56,12 @@ class Product(models.Model):
         return "-".join(sku_parts)
 
 
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
+    is_main = models.BooleanField(null = False, default=False)
+    image = models.ImageField()
+
+
 class ProductVariant(models.Model):
     product = models.ForeignKey(Product, related_name='variants', on_delete=models.CASCADE)
     sku = models.CharField(max_length=50, unique=True, blank=True, null=True)
