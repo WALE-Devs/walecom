@@ -6,6 +6,7 @@ from .serializers import ProductSerializer, ProductImageSerializer
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.select_related('category').prefetch_related('tags', 'images', 'variants')
     serializer_class = ProductSerializer
+    lookup_field = 'slug'
 
     def perform_create(self, serializer):
         product = serializer.save()

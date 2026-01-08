@@ -41,6 +41,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'name',
+            'slug',
             'description',
             'base_sku',
             'category',
@@ -51,6 +52,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'images',
             'variants'
         ]
+        read_only_fields = ['slug']
 
     def create(self, validated_data):
         # Get variants if exist
