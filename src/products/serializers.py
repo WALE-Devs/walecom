@@ -25,15 +25,47 @@ class ProductVariantSerializer(serializers.ModelSerializer):
         ]
 
 
-class ProductSerializer(serializers.ModelSerializer):
-    images = ProductImageSerializer(many=True, read_only=True, required=False)
+class ProductListSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = [
+            'id',
+            'name',
+            'slug',
+            'description',
+            'base_sku',
+            'category',
+            'currency',
+            'default_price',
+            'default_stock',
+            'image',
+            'tags',
+        ]
+
+    def get_image(self, obj):
+        request = self.context.get('request')
+        image = obj.images.filter(is_main=True).first() or obj.images.filter(is_main=False).first()
+        if not image:
+            return None
+        url = image.image.url
+        return request.build_absolute_uri(url) if request else url
+
+
+    def get_tags(self, obj):
+        return [tag.name for tag in obj.tags.all()]
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    images = ProductImageSerializer(many=True, read_only=True)
     variants = ProductVariantSerializer(many=True, required=False)
-    tags = serializers.SlugRelatedField(
-        many=True,
-        slug_field='name',
+    tags = serializers.ListField(
+        child=serializers.CharField(),
         required=False,
         allow_empty=True,
-        queryset=Tag.objects.all()
+        write_only=True
     )
 
     class Meta:
@@ -55,23 +87,21 @@ class ProductSerializer(serializers.ModelSerializer):
         read_only_fields = ['slug']
 
     def create(self, validated_data):
-        # Get variants if exist
-        variants_data = validated_data.pop('variants', [])
-        tags_data = validated_data.pop('tags', [])
+        variants_data = validated_data.pop('variants', None)
+        tags_data = validated_data.pop('tags', None)
 
-        # Create product
         product = Product.objects.create(**validated_data)
 
-        # Tags set
-        if tags_data:
-            # Tags creation
-            tag_objects = [Tag.objects.get_or_create(name=name)[0] for name in tags_data]
+        if tags_data is not None:
+            tag_objects = [
+                Tag.objects.get_or_create(name=name.strip().lower())[0]
+                for name in tags_data
+            ]
             product.tags.set(tag_objects)
 
-
-        # Create variants
-        for variant_data in variants_data:
-            ProductVariant.objects.create(product=product, **variant_data)
+        if variants_data is not None:
+            for variant_data in variants_data:
+                ProductVariant.objects.create(product=product, **variant_data)
 
         return product
 
@@ -86,8 +116,10 @@ class ProductSerializer(serializers.ModelSerializer):
 
         # Update tags
         if tags_data is not None:
-            # Tags creation
-            tag_objects = [Tag.objects.get_or_create(name=name)[0] for name in tags_data]
+            tag_objects = [
+                Tag.objects.get_or_create(name=name.strip().lower())[0]
+                for name in tags_data
+            ]
             instance.tags.set(tag_objects)
 
         # Update variants
@@ -97,4 +129,10 @@ class ProductSerializer(serializers.ModelSerializer):
                 ProductVariant.objects.create(product=instance, **variant_data)
 
         return instance
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['tags'] = [tag.name for tag in instance.tags.all()]
+        return data
+
 
