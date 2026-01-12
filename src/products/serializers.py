@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Prefetch
 from .models import Product, ProductImage, ProductVariant, Tag
 
 
@@ -67,6 +68,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         allow_empty=True,
         write_only=True
     )
+    related_products = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -82,9 +84,58 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'default_stock',
             'tags',
             'images',
-            'variants'
+            'variants',
+            'related_products'
         ]
         read_only_fields = ['slug']
+
+    def get_related_products(self, obj):
+        """
+        Devuelve una lista de productos relacionados por categoría o tags,
+        optimizada con Prefetch y only().
+        """
+        # Exclude current product
+        related_qs = Product.objects.exclude(id=obj.id)
+
+        # Filter by category if exists
+        if obj.category:
+            related_qs = related_qs.filter(category=obj.category)
+        # If it has no category use tags
+        elif obj.tags.exists():
+            related_qs = related_qs.filter(tags__in=obj.tags.all()).distinct()
+        else:
+            return []
+
+        # query w/only, prefetch, limit 4
+        related_qs = related_qs.only(
+            'id', 'name', 'slug', 'currency', 'default_price', 'base_sku'
+        ).prefetch_related(
+            Prefetch(
+                'images',
+                queryset=ProductImage.objects.only('image', 'is_main', 'product'),
+            )
+        )[:4]  # Limit to 4
+
+        # Convert to list of dicts
+        request = self.context.get('request')
+        result = []
+        for p in related_qs:
+            image = p.images.filter(is_main=True).first() or p.images.first()
+            image_url = None
+            if image:
+                url = image.image.url
+                image_url = request.build_absolute_uri(url) if request else url
+            result.append({
+                'id': p.id,
+                'name': p.name,
+                'slug': p.slug,
+                'price': str(p.default_price),
+                'currency': p.currency,
+                'image': image_url,
+            })
+
+        return result
+
 
     def create(self, validated_data):
         variants_data = validated_data.pop('variants', None)
