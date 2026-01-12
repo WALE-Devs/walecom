@@ -10,7 +10,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
             'id',
             'product',
             'image',
-            'is_main'
+            'position'
         ]
 
 
@@ -48,7 +48,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         request = self.context.get('request')
-        image = obj.images.filter(is_main=True).first() or obj.images.filter(is_main=False).first()
+        image = obj.images.order_by('position').first()
         if not image:
             return None
         url = image.image.url
@@ -60,6 +60,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
+    main_image = serializers.SerializerMethodField()
     images = ProductImageSerializer(many=True, read_only=True)
     variants = ProductVariantSerializer(many=True, required=False)
     tags = serializers.ListField(
@@ -83,24 +84,32 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'default_price',
             'default_stock',
             'tags',
+            'main_image',
             'images',
             'variants',
             'related_products'
         ]
         read_only_fields = ['slug']
 
+    def get_main_image(self, obj):
+        """Returns the main image (position 0 or first one)."""
+        request = self.context.get('request')
+        image = obj.images.order_by('position').first()
+        if not image:
+            return None
+        url = image.image.url
+        return request.build_absolute_uri(url) if request else url
+
+
     def get_related_products(self, obj):
         """
-        Devuelve una lista de productos relacionados por categoría o tags,
-        optimizada con Prefetch y only().
+        Returns a list of products related by category or tags, optimized with Prefetch and only()
         """
-        # Exclude current product
         related_qs = Product.objects.exclude(id=obj.id)
 
-        # Filter by category if exists
+        # Filter by category if exists else by tags
         if obj.category:
             related_qs = related_qs.filter(category=obj.category)
-        # If it has no category use tags
         elif obj.tags.exists():
             related_qs = related_qs.filter(tags__in=obj.tags.all()).distinct()
         else:
@@ -112,15 +121,15 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         ).prefetch_related(
             Prefetch(
                 'images',
-                queryset=ProductImage.objects.only('image', 'is_main', 'product'),
+                queryset=ProductImage.objects.only('image', 'position', 'product').order_by('position'),
             )
-        )[:4]  # Limit to 4
+        )[:4]
 
         # Convert to list of dicts
         request = self.context.get('request')
         result = []
         for p in related_qs:
-            image = p.images.filter(is_main=True).first() or p.images.first()
+            image = p.images.order_by('position').first()
             image_url = None
             if image:
                 url = image.image.url

@@ -61,8 +61,18 @@ class ProductVariant(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-    is_main = models.BooleanField(null = False, default=False)
     image = models.ImageField()
+    position = models.PositiveIntegerField(
+        default=0,
+        help_text="Determine the order of the images; 0 = main image"
+    )
+
+    class Meta:
+        ordering = ['position']
+        #unique_together = ('product', 'position')
+
+    def __str__(self):
+        return f"{self.product.name} - Image {self.position}"
 
 
 class CartManager(models.Manager):
