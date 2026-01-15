@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser, AllowAny
+from django.db.models import Prefetch
 from .models import Product, ProductVariant, ProductImage
 from .serializers import ProductListSerializer, ProductDetailSerializer, ProductImageSerializer
 
@@ -11,6 +13,12 @@ class ProductViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return base_qs.prefetch_related('tags', 'images')
         return base_qs.prefetch_related('tags', 'images', 'variants')
+
+    def get_permissions(self):
+        """Public read, admin-only write."""
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAdminUser()]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -30,5 +38,11 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class ProductImageViewSet(viewsets.ModelViewSet):
-    queryset = ProductImage.objects.all()
+    queryset = ProductImage.objects.select_related('product').order_by('position')
     serializer_class = ProductImageSerializer
+
+    def get_permissions(self):
+        """Public read, admin-only write."""
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]
+        return [IsAdminUser()]

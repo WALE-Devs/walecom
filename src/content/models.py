@@ -6,10 +6,7 @@ class Content(models.Model):
     identifier = models.SlugField(max_length=50)
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    language = models.CharField(
-        max_length=5,
-        default='es',
-    )
+    language = models.CharField(max_length=5, default='es')
     is_active = models.BooleanField(default=True)
     last_updated = models.DateTimeField(auto_now=True)
 
@@ -29,17 +26,11 @@ class ContentBlock(models.Model):
     subtitle = models.CharField(max_length=200, blank=True)
     content_text = models.TextField(blank=True)
     items = models.JSONField(default=list, blank=True)
-    image = models.ImageField(upload_to='content/', blank=True, null=True)
+    image_path = models.CharField(max_length=255, blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
-    type = models.CharField(
-        max_length=50,
-        blank=True,
-    )
-    language = models.CharField(
-        max_length=5,
-        default='es',
-    )
+    type = models.CharField(max_length=50, blank=True)
+    language = models.CharField(max_length=5, default='es')
 
     class Meta:
         unique_together = ('content', 'identifier', 'language')

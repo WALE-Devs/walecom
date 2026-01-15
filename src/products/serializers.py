@@ -1,17 +1,28 @@
 from rest_framework import serializers
 from django.db.models import Prefetch
+from django.conf import settings
 from .models import Product, ProductImage, ProductVariant, Tag
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = ProductImage
         fields = [
             'id',
             'product',
-            'image',
+            'image_path',   # relative path stored in DB
+            'image_url',    # computed absolute URL
             'position'
         ]
+    def get_image_url(self, obj):
+        """Builds absolute image URL based on MEDIA_URL and request context."""
+        if not obj.image_path:
+            return None
+
+        request = self.context.get('request')
+        relative_url = f"{settings.MEDIA_URL}{obj.image_path}"
+        return request.build_absolute_uri(relative_url) if request else relative_url
 
 
 class ProductVariantSerializer(serializers.ModelSerializer):
@@ -27,7 +38,8 @@ class ProductVariantSerializer(serializers.ModelSerializer):
 
 
 class ProductListSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
+    image_path = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
 
     class Meta:
@@ -42,25 +54,33 @@ class ProductListSerializer(serializers.ModelSerializer):
             'currency',
             'default_price',
             'default_stock',
-            'image',
+            'image_path',
+            'image_url',
             'tags',
         ]
 
-    def get_image(self, obj):
-        request = self.context.get('request')
+    def get_image_path(self, obj):
+        """Returns the relative path of the main product image."""
         image = obj.images.order_by('position').first()
-        if not image:
-            return None
-        url = image.image.url
-        return request.build_absolute_uri(url) if request else url
+        return image.image_path if image and image.image_path else None
 
+    def get_image_url(self, obj):
+        """Returns the absolute URL of the main image."""
+        image = obj.images.order_by('position').first()
+        if not image or not image.image_path:
+            return None
+
+        request = self.context.get('request')
+        relative_url = f"{settings.MEDIA_URL}{image.image_path}"
+        return request.build_absolute_uri(relative_url) if request else relative_url
 
     def get_tags(self, obj):
         return [tag.name for tag in obj.tags.all()]
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
-    main_image = serializers.SerializerMethodField()
+    main_image_path = serializers.SerializerMethodField()
+    main_image_url = serializers.SerializerMethodField()
     images = ProductImageSerializer(many=True, read_only=True)
     variants = ProductVariantSerializer(many=True, required=False)
     tags = serializers.ListField(
@@ -84,22 +104,28 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'default_price',
             'default_stock',
             'tags',
-            'main_image',
+            'main_image_path',
+            'main_image_url',
             'images',
             'variants',
             'related_products'
         ]
         read_only_fields = ['slug']
 
-    def get_main_image(self, obj):
-        """Returns the main image (position 0 or first one)."""
-        request = self.context.get('request')
+    def get_main_image_path(self, obj):
+        """Returns the relative path of the main image (from MEDIA_ROOT)."""
         image = obj.images.order_by('position').first()
-        if not image:
-            return None
-        url = image.image.url
-        return request.build_absolute_uri(url) if request else url
+        return image.image_path if image and image.image_path else None
 
+    def get_main_image_url(self, obj):
+        """Returns the absolute URL for the main image using MEDIA_URL and request context."""
+        image = obj.images.order_by('position').first()
+        if not image or not image.image_path:
+            return None
+
+        request = self.context.get('request')
+        relative_url = f"{settings.MEDIA_URL}{image.image_path}"
+        return request.build_absolute_uri(relative_url) if request else relative_url
 
     def get_related_products(self, obj):
         """
@@ -121,26 +147,27 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         ).prefetch_related(
             Prefetch(
                 'images',
-                queryset=ProductImage.objects.only('image', 'position', 'product').order_by('position'),
+                queryset=ProductImage.objects.only('image_path', 'position', 'product').order_by('position'),
             )
         )[:4]
 
-        # Convert to list of dicts
+        # Serialize manually
         request = self.context.get('request')
         result = []
         for p in related_qs:
             image = p.images.order_by('position').first()
             image_url = None
-            if image:
-                url = image.image.url
-                image_url = request.build_absolute_uri(url) if request else url
+            if image and image.image_path:
+                relative_url = f"{settings.MEDIA_URL}{image.image_path}"
+                image_url = request.build_absolute_uri(relative_url) if request else relative_url
+
             result.append({
                 'id': p.id,
                 'name': p.name,
                 'slug': p.slug,
                 'price': str(p.default_price),
                 'currency': p.currency,
-                'image': image_url,
+                'image_path': image_url,
             })
 
         return result
@@ -152,6 +179,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
         product = Product.objects.create(**validated_data)
 
+        # Handle tags
         if tags_data is not None:
             tag_objects = [
                 Tag.objects.get_or_create(name=name.strip().lower())[0]
@@ -159,6 +187,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             ]
             product.tags.set(tag_objects)
 
+        # Handle variants
         if variants_data is not None:
             for variant_data in variants_data:
                 ProductVariant.objects.create(product=product, **variant_data)
@@ -169,7 +198,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         variants_data = validated_data.pop('variants', None)
         tags_data = validated_data.pop('tags', None)
 
-        # Update regular fields
+        # Update fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()

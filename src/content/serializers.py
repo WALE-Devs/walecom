@@ -1,9 +1,12 @@
 from rest_framework import serializers
+from django.conf import settings
 from .models import Content, ContentBlock
 
 
 class ContentBlockSerializer(serializers.ModelSerializer):
-    """Serializer for sections (blocks) inside a Content entry"""
+    """Serializer for content sections (blocks) within a Content entry."""
+
+    image_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = ContentBlock
@@ -15,16 +18,30 @@ class ContentBlockSerializer(serializers.ModelSerializer):
             'subtitle',
             'content_text',
             'items',
-            'image',
+            'image_path',   # editable (stored in DB)
+            'image_url',    # computed (absolute URL)
             'order',
+            'is_active',
             'type',
             'language',
-            'is_active',
         ]
+
+    def get_image_url(self, obj):
+        """
+        Builds an absolute URL for the image using MEDIA_URL and request context.
+        Returns None if no image_path is set.
+        """
+        if not obj.image_path:
+            return None
+
+        request = self.context.get('request')
+        relative_url = f"{settings.MEDIA_URL}{obj.image_path}"
+        return request.build_absolute_uri(relative_url) if request else relative_url
 
 
 class ContentSerializer(serializers.ModelSerializer):
-    """Serializer for top-level content entries (About, FAQ, etc.)"""
+    """Serializer for main content entries (About, FAQ, Contact, etc.)"""
+
     blocks = ContentBlockSerializer(many=True, read_only=True)
 
     class Meta:

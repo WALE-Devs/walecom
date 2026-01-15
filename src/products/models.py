@@ -61,11 +61,8 @@ class ProductVariant(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='products/')
-    position = models.PositiveIntegerField(
-        default=0,
-        help_text="Determine the order of the images; 0 = main image"
-    )
+    image_path = models.CharField(max_length=255, blank=True, null=True)
+    position = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ['position']
