@@ -159,6 +159,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             image_url = None
             if image and image.image_path:
                 relative_url = f"{settings.MEDIA_URL}{image.image_path}"
+                image_path = image.image_path
                 image_url = request.build_absolute_uri(relative_url) if request else relative_url
 
             result.append({
@@ -167,7 +168,8 @@ class ProductDetailSerializer(serializers.ModelSerializer):
                 'slug': p.slug,
                 'price': str(p.default_price),
                 'currency': p.currency,
-                'image_path': image_url,
+                'image_path': image_path,
+                'image_url': image_url
             })
 
         return result
