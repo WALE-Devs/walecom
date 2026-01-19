@@ -1,0 +1,249 @@
+[
+{
+  "model": "content.content",
+  "pk": 1,
+  "fields": {
+    "identifier": "about",
+    "title": "Sobre Nosotros",
+    "description": "En MyLanding nos especializamos en ofrecer productos de alta calidad con un enfoque sostenible. Creemos en la innovación, el diseño responsable y la satisfacción de nuestros clientes.",
+    "language": "es",
+    "is_active": true,
+    "last_updated": "2026-01-14T17:51:06.126Z"
+  }
+},
+{
+  "model": "content.content",
+  "pk": 2,
+  "fields": {
+    "identifier": "contact",
+    "title": "Contáctanos",
+    "description": "¿Tienes alguna pregunta o comentario? Estamos aquí para ayudarte.",
+    "language": "es",
+    "is_active": true,
+    "last_updated": "2026-01-14T19:19:49.215Z"
+  }
+},
+{
+  "model": "content.content",
+  "pk": 3,
+  "fields": {
+    "identifier": "faq",
+    "title": "Preguntas Frecuentes",
+    "description": "Encuentra respuestas rápidas a las preguntas más comunes sobre nuestros productos y servicios.",
+    "language": "es",
+    "is_active": true,
+    "last_updated": "2026-01-14T19:37:54.616Z"
+  }
+},
+{
+  "model": "content.content",
+  "pk": 4,
+  "fields": {
+    "identifier": "slider",
+    "title": "Home Slider",
+    "description": "",
+    "language": "es",
+    "is_active": true,
+    "last_updated": "2026-01-19T13:55:34.142Z"
+  }
+},
+{
+  "model": "content.contentblock",
+  "pk": 3,
+  "fields": {
+    "content": 1,
+    "identifier": "mission",
+    "title": "Misión",
+    "subtitle": "",
+    "content_text": "Brindar productos útiles, duraderos y respetuosos con el medio ambiente.",
+    "items": [],
+    "image_path": null,
+    "order": 1,
+    "is_active": true,
+    "type": "",
+    "language": "es"
+  }
+},
+{
+  "model": "content.contentblock",
+  "pk": 4,
+  "fields": {
+    "content": 1,
+    "identifier": "vision",
+    "title": "Visión",
+    "subtitle": "",
+    "content_text": "Convertirnos en una marca líder en innovación sostenible a nivel regional.",
+    "items": [],
+    "image_path": null,
+    "order": 1,
+    "is_active": true,
+    "type": "",
+    "language": "es"
+  }
+},
+{
+  "model": "content.contentblock",
+  "pk": 5,
+  "fields": {
+    "content": 1,
+    "identifier": "values",
+    "title": "Valores",
+    "subtitle": "",
+    "content_text": "",
+    "items": [
+      "Calidad",
+      "Sostenibilidad",
+      "Transparencia",
+      "Innovación"
+    ],
+    "image_path": null,
+    "order": 1,
+    "is_active": true,
+    "type": "",
+    "language": "es"
+  }
+},
+{
+  "model": "content.contentblock",
+  "pk": 6,
+  "fields": {
+    "content": 2,
+    "identifier": "information",
+    "title": "Información de Contacto",
+    "subtitle": "",
+    "content_text": "",
+    "items": {
+      "email": "contacto@mylanding.com",
+      "phone": "+51 999 888 777",
+      "address": "Av. Los Pinos 123, Lima, Perú"
+    },
+    "image_path": null,
+    "order": 1,
+    "is_active": true,
+    "type": "",
+    "language": "es"
+  }
+},
+{
+  "model": "content.contentblock",
+  "pk": 7,
+  "fields": {
+    "content": 2,
+    "identifier": "social",
+    "title": "Redes Sociales",
+    "subtitle": "",
+    "content_text": "",
+    "items": {
+      "instagram": "https://instagram.com/mylanding",
+      "facebook": "https://facebook.com/mylanding"
+    },
+    "image_path": null,
+    "order": 2,
+    "is_active": true,
+    "type": "",
+    "language": "es"
+  }
+},
+{
+  "model": "content.contentblock",
+  "pk": 8,
+  "fields": {
+    "content": 3,
+    "identifier": "shipping",
+    "title": "¿Cuánto tarda el envío?",
+    "subtitle": "",
+    "content_text": "Los pedidos se procesan en un plazo de 24 a 48 horas y los envíos suelen tardar entre 3 y 7 días hábiles, dependiendo de la ubicación.",
+    "items": [],
+    "image_path": null,
+    "order": 1,
+    "is_active": true,
+    "type": "",
+    "language": "es"
+  }
+},
+{
+  "model": "content.contentblock",
+  "pk": 9,
+  "fields": {
+    "content": 3,
+    "identifier": "returns",
+    "title": "¿Puedo devolver un producto?",
+    "subtitle": "",
+    "content_text": "Sí. Aceptamos devoluciones dentro de los 30 días posteriores a la compra siempre que el producto esté en su estado original.",
+    "items": [],
+    "image_path": null,
+    "order": 2,
+    "is_active": true,
+    "type": "",
+    "language": "es"
+  }
+},
+{
+  "model": "content.contentblock",
+  "pk": 10,
+  "fields": {
+    "content": 3,
+    "identifier": "payment",
+    "title": "¿Qué métodos de pago aceptan?",
+    "subtitle": "",
+    "content_text": "Aceptamos tarjetas de crédito y débito, transferencias bancarias y pagos mediante billeteras digitales como Yape y Plin.",
+    "items": [],
+    "image_path": null,
+    "order": 3,
+    "is_active": true,
+    "type": "",
+    "language": "es"
+  }
+},
+{
+  "model": "content.contentblock",
+  "pk": 11,
+  "fields": {
+    "content": 4,
+    "identifier": "slider1",
+    "title": "",
+    "subtitle": "",
+    "content_text": "",
+    "items": [],
+    "image_path": "content/banner1.png",
+    "order": 1,
+    "is_active": true,
+    "type": "",
+    "language": "es"
+  }
+},
+{
+  "model": "content.contentblock",
+  "pk": 12,
+  "fields": {
+    "content": 4,
+    "identifier": "slider2",
+    "title": "",
+    "subtitle": "",
+    "content_text": "",
+    "items": [],
+    "image_path": "content/banner2.png",
+    "order": 2,
+    "is_active": true,
+    "type": "",
+    "language": "es"
+  }
+},
+{
+  "model": "content.contentblock",
+  "pk": 13,
+  "fields": {
+    "content": 4,
+    "identifier": "slider3",
+    "title": "",
+    "subtitle": "",
+    "content_text": "",
+    "items": [],
+    "image_path": "content/banner3.png",
+    "order": 3,
+    "is_active": true,
+    "type": "",
+    "language": "es"
+  }
+}
+]
