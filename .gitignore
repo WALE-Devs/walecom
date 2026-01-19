@@ -5,3 +5,5 @@ venv/
 db.sqlite3
 CLAUDE.md
 src/media/
+.env*
+!.env.example
