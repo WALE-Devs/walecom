@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAdminUser, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Prefetch
@@ -9,8 +9,9 @@ from .filters import ProductFilter
 
 class ProductViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = ProductFilter
+    search_fields = ['name']
 
     def get_queryset(self):
         base_qs = Product.objects.select_related('category')

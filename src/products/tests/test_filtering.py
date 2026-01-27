@@ -122,3 +122,18 @@ class TestProductFiltering:
         assert response.status_code == 200
         data = response.json()
         assert len(data) == 0
+
+    def test_search_by_name(self):
+        # Search for "Lap" should return "Laptop"
+        response = self.client.get(self.url, {'search': 'Lap'})
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data) == 1
+        assert data[0]['name'] == "Laptop"
+
+        # Search for "ne" should return "Phone"
+        response = self.client.get(self.url, {'search': 'ne'})
+        assert response.status_code == 200
+        data = response.json()
+        assert len(data) == 1
+        assert data[0]['name'] == "Phone"
