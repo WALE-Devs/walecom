@@ -1,12 +1,16 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, AllowAny
+from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Prefetch
 from .models import Product, ProductVariant, ProductImage
 from .serializers import ProductListSerializer, ProductDetailSerializer, ProductImageSerializer
+from .filters import ProductFilter
 
 
 class ProductViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProductFilter
 
     def get_queryset(self):
         base_qs = Product.objects.select_related('category')
