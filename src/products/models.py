@@ -70,30 +70,3 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - Image {self.position}"
-
-
-class CartManager(models.Manager):
-    def create_from_products(self, user, products):
-        cart = Cart.objects.create(user=user)
-        for product_data in products:
-            CartProduct.objects.create(
-                cart=cart,
-                product_variant=product_data.get('product_variant_id'),
-                quantity=product_data.get('quantity')
-            )
-        return cart
-
-
-class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
-
-    objects = CartManager()
-
-    def __str__(self):
-        return f"{self.user.username}'s cart "
-
-
-class CartProduct(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()

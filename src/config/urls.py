@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path("api/", include("products.urls")),
     path("api/", include("content.urls")),
+    path("api/", include("orders.urls")),
 ]
 
 from django.conf import settings
