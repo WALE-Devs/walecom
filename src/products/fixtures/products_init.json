@@ -1,477 +1,487 @@
 [
-{
-  "model": "products.tag",
-  "pk": 1,
-  "fields": {
-    "name": "ropa"
+  {
+    "model": "products.category",
+    "pk": 1,
+    "fields": {
+      "name": "General",
+      "slug": "general",
+      "description": "General category for testing"
+    }
+  },
+  {
+    "model": "products.tag",
+    "pk": 1,
+    "fields": {
+      "name": "ropa"
+    }
+  },
+  {
+    "model": "products.tag",
+    "pk": 2,
+    "fields": {
+      "name": "básico"
+    }
+  },
+  {
+    "model": "products.tag",
+    "pk": 3,
+    "fields": {
+      "name": "algodón"
+    }
+  },
+  {
+    "model": "products.tag",
+    "pk": 4,
+    "fields": {
+      "name": "calzado"
+    }
+  },
+  {
+    "model": "products.tag",
+    "pk": 5,
+    "fields": {
+      "name": "urbano"
+    }
+  },
+  {
+    "model": "products.tag",
+    "pk": 6,
+    "fields": {
+      "name": "accesorios"
+    }
+  },
+  {
+    "model": "products.tag",
+    "pk": 7,
+    "fields": {
+      "name": "eco"
+    }
+  },
+  {
+    "model": "products.tag",
+    "pk": 8,
+    "fields": {
+      "name": "bolso"
+    }
+  },
+  {
+    "model": "products.tag",
+    "pk": 9,
+    "fields": {
+      "name": "chaqueta"
+    }
+  },
+  {
+    "model": "products.tag",
+    "pk": 10,
+    "fields": {
+      "name": "unisex"
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 1,
+    "fields": {
+      "name": "Bolso tote ecológico",
+      "slug": "bolso-tote-ecologico",
+      "description": "Bolso tote reutilizable hecho con materiales reciclados.",
+      "base_sku": "BTE",
+      "category": 1,
+      "currency": "PEN",
+      "default_price": "59.90",
+      "default_stock": 0,
+      "tags": [
+        6,
+        7,
+        8
+      ]
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 2,
+    "fields": {
+      "name": "Zapatilla Urbana Negra",
+      "slug": "zapatilla-urbana-negra",
+      "description": "Zapatillas de diseño urbano con suela antideslizante y plantilla acolchada.",
+      "base_sku": "ZUN",
+      "category": 1,
+      "currency": "PEN",
+      "default_price": "199.90",
+      "default_stock": 0,
+      "tags": [
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 4,
+    "fields": {
+      "name": "Camiseta básica blanca",
+      "slug": "camiseta-basica-blanca",
+      "description": "Camiseta 100% algodón orgánico. Suave, fresca y cómoda para el día a día.",
+      "base_sku": "CBB",
+      "category": 1,
+      "currency": "PEN",
+      "default_price": "49.90",
+      "default_stock": 0,
+      "tags": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 5,
+    "fields": {
+      "name": "Chaqueta ligera beige",
+      "slug": "chaqueta-ligera-beige",
+      "description": "Chaqueta liviana para media estación, resistente al viento y al agua.",
+      "base_sku": "CLB",
+      "category": 1,
+      "currency": "PEN",
+      "default_price": "169.90",
+      "default_stock": 0,
+      "tags": [
+        1,
+        2,
+        9,
+        10
+      ]
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 7,
+    "fields": {
+      "name": "Zapatillas Urbanas Blancas",
+      "slug": "zapatillas-urbanas-blancas",
+      "description": "Zapatillas Blancas de diseño urbano con suela antideslizante y plantilla acolchada.",
+      "base_sku": "ZUB",
+      "category": 1,
+      "currency": "PEN",
+      "default_price": "259.90",
+      "default_stock": 0,
+      "tags": [
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 1,
+    "fields": {
+      "product": 1,
+      "name": "Default",
+      "sku": "BTE-DEF",
+      "price": "59.90",
+      "stock": 50
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 2,
+    "fields": {
+      "product": 2,
+      "name": "42",
+      "sku": "ZUN-42",
+      "price": "199.90",
+      "stock": 20
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 3,
+    "fields": {
+      "product": 2,
+      "name": "43",
+      "sku": "ZUN-43",
+      "price": "199.90",
+      "stock": 30
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 4,
+    "fields": {
+      "product": 2,
+      "name": "44",
+      "sku": "ZUN-44",
+      "price": "199.90",
+      "stock": 40
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 6,
+    "fields": {
+      "product": 4,
+      "name": "XS",
+      "sku": "CBB-XS",
+      "price": "49.90",
+      "stock": 20
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 7,
+    "fields": {
+      "product": 4,
+      "name": "S",
+      "sku": "CBB-S",
+      "price": "49.90",
+      "stock": 30
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 8,
+    "fields": {
+      "product": 4,
+      "name": "M",
+      "sku": "CBB-M",
+      "price": "49.90",
+      "stock": 40
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 9,
+    "fields": {
+      "product": 4,
+      "name": "L",
+      "sku": "CBB-L",
+      "price": "49.90",
+      "stock": 40
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 10,
+    "fields": {
+      "product": 4,
+      "name": "XL",
+      "sku": "CBB-XL",
+      "price": "49.90",
+      "stock": 40
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 12,
+    "fields": {
+      "product": 5,
+      "name": "S",
+      "sku": "CLB-S",
+      "price": "169.90",
+      "stock": 20
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 13,
+    "fields": {
+      "product": 5,
+      "name": "M",
+      "sku": "CLB-M",
+      "price": "169.90",
+      "stock": 30
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 14,
+    "fields": {
+      "product": 5,
+      "name": "L",
+      "sku": "CLB-L",
+      "price": "169.90",
+      "stock": 40
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 15,
+    "fields": {
+      "product": 5,
+      "name": "XL",
+      "sku": "CLB-XL",
+      "price": "169.90",
+      "stock": 40
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 17,
+    "fields": {
+      "product": 7,
+      "name": "39",
+      "sku": "ZUB-39",
+      "price": "259.90",
+      "stock": 20
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 18,
+    "fields": {
+      "product": 7,
+      "name": "40",
+      "sku": "ZUB-40",
+      "price": "259.90",
+      "stock": 30
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 19,
+    "fields": {
+      "product": 7,
+      "name": "40.5",
+      "sku": "ZUB-405",
+      "price": "259.90",
+      "stock": 30
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 20,
+    "fields": {
+      "product": 7,
+      "name": "41",
+      "sku": "ZUB-41",
+      "price": "259.90",
+      "stock": 30
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 21,
+    "fields": {
+      "product": 7,
+      "name": "42",
+      "sku": "ZUB-42",
+      "price": "259.90",
+      "stock": 30
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 22,
+    "fields": {
+      "product": 7,
+      "name": "42.5",
+      "sku": "ZUB-425",
+      "price": "259.90",
+      "stock": 30
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 23,
+    "fields": {
+      "product": 7,
+      "name": "43",
+      "sku": "ZUB-43",
+      "price": "259.90",
+      "stock": 40
+    }
+  },
+  {
+    "model": "products.productvariant",
+    "pk": 24,
+    "fields": {
+      "product": 7,
+      "name": "44",
+      "sku": "ZUB-44",
+      "price": "259.90",
+      "stock": 40
+    }
+  },
+  {
+    "model": "products.productimage",
+    "pk": 1,
+    "fields": {
+      "product": 5,
+      "image": "products/clb.jpg",
+      "position": 0
+    }
+  },
+  {
+    "model": "products.productimage",
+    "pk": 2,
+    "fields": {
+      "product": 4,
+      "image": "products/cbb.png",
+      "position": 0
+    }
+  },
+  {
+    "model": "products.productimage",
+    "pk": 3,
+    "fields": {
+      "product": 2,
+      "image": "products/zun.jpg",
+      "position": 0
+    }
+  },
+  {
+    "model": "products.productimage",
+    "pk": 5,
+    "fields": {
+      "product": 7,
+      "image": "products/zcb1.jpeg",
+      "position": 0
+    }
+  },
+  {
+    "model": "products.productimage",
+    "pk": 6,
+    "fields": {
+      "product": 7,
+      "image": "products/zcb2.webp",
+      "position": 0
+    }
+  },
+  {
+    "model": "products.productimage",
+    "pk": 7,
+    "fields": {
+      "product": 7,
+      "image": "products/zcb3.webp",
+      "position": 0
+    }
+  },
+  {
+    "model": "products.productimage",
+    "pk": 8,
+    "fields": {
+      "product": 7,
+      "image": "products/zcb4.webp",
+      "position": 0
+    }
+  },
+  {
+    "model": "products.productimage",
+    "pk": 9,
+    "fields": {
+      "product": 7,
+      "image": "products/zcb5.webp",
+      "position": 0
+    }
+  },
+  {
+    "model": "products.productimage",
+    "pk": 10,
+    "fields": {
+      "product": 1,
+      "image": "products/bte.jpg",
+      "position": 0
+    }
   }
-},
-{
-  "model": "products.tag",
-  "pk": 2,
-  "fields": {
-    "name": "básico"
-  }
-},
-{
-  "model": "products.tag",
-  "pk": 3,
-  "fields": {
-    "name": "algodón"
-  }
-},
-{
-  "model": "products.tag",
-  "pk": 4,
-  "fields": {
-    "name": "calzado"
-  }
-},
-{
-  "model": "products.tag",
-  "pk": 5,
-  "fields": {
-    "name": "urbano"
-  }
-},
-{
-  "model": "products.tag",
-  "pk": 6,
-  "fields": {
-    "name": "accesorios"
-  }
-},
-{
-  "model": "products.tag",
-  "pk": 7,
-  "fields": {
-    "name": "eco"
-  }
-},
-{
-  "model": "products.tag",
-  "pk": 8,
-  "fields": {
-    "name": "bolso"
-  }
-},
-{
-  "model": "products.tag",
-  "pk": 9,
-  "fields": {
-    "name": "chaqueta"
-  }
-},
-{
-  "model": "products.tag",
-  "pk": 10,
-  "fields": {
-    "name": "unisex"
-  }
-},
-{
-  "model": "products.product",
-  "pk": 1,
-  "fields": {
-    "name": "Bolso tote ecológico",
-    "slug": "bolso-tote-ecologico",
-    "description": "Bolso tote reutilizable hecho con materiales reciclados.",
-    "base_sku": "BTE",
-    "category": null,
-    "currency": "PEN",
-    "default_price": "59.90",
-    "default_stock": 0,
-    "tags": [
-      6,
-      7,
-      8
-    ]
-  }
-},
-{
-  "model": "products.product",
-  "pk": 2,
-  "fields": {
-    "name": "Zapatilla Urbana Negra",
-    "slug": "zapatilla-urbana-negra",
-    "description": "Zapatillas de diseño urbano con suela antideslizante y plantilla acolchada.",
-    "base_sku": "ZUN",
-    "category": null,
-    "currency": "PEN",
-    "default_price": "199.90",
-    "default_stock": 0,
-    "tags": [
-      4,
-      5
-    ]
-  }
-},
-{
-  "model": "products.product",
-  "pk": 4,
-  "fields": {
-    "name": "Camiseta básica blanca",
-    "slug": "camiseta-basica-blanca",
-    "description": "Camiseta 100% algodón orgánico. Suave, fresca y cómoda para el día a día.",
-    "base_sku": "CBB",
-    "category": null,
-    "currency": "PEN",
-    "default_price": "49.90",
-    "default_stock": 0,
-    "tags": [
-      1,
-      2,
-      3
-    ]
-  }
-},
-{
-  "model": "products.product",
-  "pk": 5,
-  "fields": {
-    "name": "Chaqueta ligera beige",
-    "slug": "chaqueta-ligera-beige",
-    "description": "Chaqueta liviana para media estación, resistente al viento y al agua.",
-    "base_sku": "CLB",
-    "category": null,
-    "currency": "PEN",
-    "default_price": "169.90",
-    "default_stock": 0,
-    "tags": [
-      1,
-      9,
-      10
-    ]
-  }
-},
-{
-  "model": "products.product",
-  "pk": 7,
-  "fields": {
-    "name": "Zapatillas Urbanas Blancas",
-    "slug": "zapatillas-urbanas-blancas",
-    "description": "Zapatillas Blancas de diseño urbano con suela antideslizante y plantilla acolchada.",
-    "base_sku": "ZUB",
-    "category": null,
-    "currency": "PEN",
-    "default_price": "259.90",
-    "default_stock": 0,
-    "tags": [
-      4,
-      5
-    ]
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 1,
-  "fields": {
-    "product": 1,
-    "name": "Default",
-    "sku": "BTE-DEF",
-    "price": "59.90",
-    "stock": 50
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 2,
-  "fields": {
-    "product": 2,
-    "name": "42",
-    "sku": "ZUN-42",
-    "price": "199.90",
-    "stock": 20
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 3,
-  "fields": {
-    "product": 2,
-    "name": "43",
-    "sku": "ZUN-43",
-    "price": "199.90",
-    "stock": 30
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 4,
-  "fields": {
-    "product": 2,
-    "name": "44",
-    "sku": "ZUN-44",
-    "price": "199.90",
-    "stock": 40
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 6,
-  "fields": {
-    "product": 4,
-    "name": "XS",
-    "sku": "CBB-XS",
-    "price": "49.90",
-    "stock": 20
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 7,
-  "fields": {
-    "product": 4,
-    "name": "S",
-    "sku": "CBB-S",
-    "price": "49.90",
-    "stock": 30
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 8,
-  "fields": {
-    "product": 4,
-    "name": "M",
-    "sku": "CBB-M",
-    "price": "49.90",
-    "stock": 40
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 9,
-  "fields": {
-    "product": 4,
-    "name": "L",
-    "sku": "CBB-L",
-    "price": "49.90",
-    "stock": 40
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 10,
-  "fields": {
-    "product": 4,
-    "name": "XL",
-    "sku": "CBB-XL",
-    "price": "49.90",
-    "stock": 40
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 12,
-  "fields": {
-    "product": 5,
-    "name": "S",
-    "sku": "CLB-S",
-    "price": "169.90",
-    "stock": 20
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 13,
-  "fields": {
-    "product": 5,
-    "name": "M",
-    "sku": "CLB-M",
-    "price": "169.90",
-    "stock": 30
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 14,
-  "fields": {
-    "product": 5,
-    "name": "L",
-    "sku": "CLB-L",
-    "price": "169.90",
-    "stock": 40
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 15,
-  "fields": {
-    "product": 5,
-    "name": "XL",
-    "sku": "CLB-XL",
-    "price": "169.90",
-    "stock": 40
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 17,
-  "fields": {
-    "product": 7,
-    "name": "39",
-    "sku": "ZUB-39",
-    "price": "259.90",
-    "stock": 20
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 18,
-  "fields": {
-    "product": 7,
-    "name": "40",
-    "sku": "ZUB-40",
-    "price": "259.90",
-    "stock": 30
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 19,
-  "fields": {
-    "product": 7,
-    "name": "40.5",
-    "sku": "ZUB-405",
-    "price": "259.90",
-    "stock": 30
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 20,
-  "fields": {
-    "product": 7,
-    "name": "41",
-    "sku": "ZUB-41",
-    "price": "259.90",
-    "stock": 30
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 21,
-  "fields": {
-    "product": 7,
-    "name": "42",
-    "sku": "ZUB-42",
-    "price": "259.90",
-    "stock": 30
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 22,
-  "fields": {
-    "product": 7,
-    "name": "42.5",
-    "sku": "ZUB-425",
-    "price": "259.90",
-    "stock": 30
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 23,
-  "fields": {
-    "product": 7,
-    "name": "43",
-    "sku": "ZUB-43",
-    "price": "259.90",
-    "stock": 40
-  }
-},
-{
-  "model": "products.productvariant",
-  "pk": 24,
-  "fields": {
-    "product": 7,
-    "name": "44",
-    "sku": "ZUB-44",
-    "price": "259.90",
-    "stock": 40
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 1,
-  "fields": {
-    "product": 5,
-    "image_path": "products/clb.jpg",
-    "position": 0
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 2,
-  "fields": {
-    "product": 4,
-    "image_path": "products/cbb.png",
-    "position": 0
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 3,
-  "fields": {
-    "product": 2,
-    "image_path": "products/zun.jpg",
-    "position": 0
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 5,
-  "fields": {
-    "product": 7,
-    "image_path": "products/zcb1.jpeg",
-    "position": 0
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 6,
-  "fields": {
-    "product": 7,
-    "image_path": "products/zcb2.webp",
-    "position": 0
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 7,
-  "fields": {
-    "product": 7,
-    "image_path": "products/zcb3.webp",
-    "position": 0
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 8,
-  "fields": {
-    "product": 7,
-    "image_path": "products/zcb4.webp",
-    "position": 0
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 9,
-  "fields": {
-    "product": 7,
-    "image_path": "products/zcb5.webp",
-    "position": 0
-  }
-},
-{
-  "model": "products.productimage",
-  "pk": 10,
-  "fields": {
-    "product": 1,
-    "image_path": "products/bte.jpg",
-    "position": 0
-  }
-}
 ]

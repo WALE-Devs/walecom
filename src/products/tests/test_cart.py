@@ -6,11 +6,10 @@ from django.contrib.auth.models import User
 
 class CartTest(TestCase):
 
-    fixtures = ["products/fixtures/products.json", "users/fixtures/users.json"]
+    fixtures = ["products/fixtures/products_init.json"]
 
     def test_cart(db):
-
-        user = User.objects.get(username="probua")
+        user = User.objects.create(username="probua")
         cart = Cart.objects.create_from_products(
             user=user,
             products=[
@@ -24,4 +23,4 @@ class CartTest(TestCase):
                 }
             ]
         )
-        import pdb; pdb.set_trace()
+        assert cart.user == user
