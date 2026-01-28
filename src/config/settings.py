@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 if 'pytest' in sys.modules:
     ENVIRONMENT = 'test'
 else:
-    ENVIRONMENT = os.getenv("DJANGO_ENV", "dev")
+    ENVIRONMENT = os.getenv("DJANGO_ENV", "local")
 env_file = BASE_DIR.parent / f".env.{ENVIRONMENT}"
 
 if env_file.exists():

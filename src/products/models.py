@@ -61,7 +61,7 @@ class ProductVariant(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='products/images/', blank=True, null=True)
+    image = models.ImageField(upload_to='products/', blank=True, null=True)
     position = models.PositiveIntegerField(default=0)
 
     class Meta:

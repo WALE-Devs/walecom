@@ -26,7 +26,7 @@ class ContentBlock(models.Model):
     subtitle = models.CharField(max_length=200, blank=True)
     content_text = models.TextField(blank=True)
     items = models.JSONField(default=list, blank=True)
-    image_path = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField(upload_to='content/', blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     type = models.CharField(max_length=50, blank=True)

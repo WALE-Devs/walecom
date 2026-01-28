@@ -5,24 +5,14 @@ from .models import Product, ProductImage, ProductVariant, Tag
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = ProductImage
         fields = [
             'id',
             'product',
-            'image',        # Changed from image_path
-            'image_url',    # computed absolute URL
+            'image',
             'position'
         ]
-    def get_image_url(self, obj):
-        """Builds absolute image URL."""
-        if not obj.image:
-            return None
-
-        request = self.context.get('request')
-        url = obj.image.url
-        return request.build_absolute_uri(url) if request else url
 
 
 class ProductVariantSerializer(serializers.ModelSerializer):
@@ -39,7 +29,6 @@ class ProductVariantSerializer(serializers.ModelSerializer):
 
 class ProductListSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
-    image_url = serializers.SerializerMethodField()
     tags = serializers.SerializerMethodField()
 
     class Meta:
@@ -55,17 +44,11 @@ class ProductListSerializer(serializers.ModelSerializer):
             'default_price',
             'default_stock',
             'image',
-            'image_url',
             'tags',
         ]
 
     def get_image(self, obj):
-        """Returns the URL path of the main product image."""
-        image = obj.images.order_by('position').first()
-        return image.image.name if image and image.image else None
-
-    def get_image_url(self, obj):
-        """Returns the absolute URL of the main image."""
+        """Returns the absolute URL of the main product image."""
         image = obj.images.order_by('position').first()
         if not image or not image.image:
             return None
@@ -80,7 +63,6 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     main_image = serializers.SerializerMethodField()
-    main_image_url = serializers.SerializerMethodField()
     images = ProductImageSerializer(many=True, read_only=True)
     variants = ProductVariantSerializer(many=True, required=False)
     tags = serializers.ListField(
@@ -105,7 +87,6 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'default_stock',
             'tags',
             'main_image',
-            'main_image_url',
             'images',
             'variants',
             'related_products'
@@ -113,12 +94,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         read_only_fields = ['slug']
 
     def get_main_image(self, obj):
-        """Returns the relative path of the main image."""
-        image = obj.images.order_by('position').first()
-        return image.image.name if image and image.image else None
-
-    def get_main_image_url(self, obj):
-        """Returns the absolute URL for the main image."""
+        """Returns the absolute URL of the main image."""
         image = obj.images.order_by('position').first()
         if not image or not image.image:
             return None
@@ -157,9 +133,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         for p in related_qs:
             image = p.images.order_by('position').first()
             image_url = None
-            image_path = None
             if image and image.image:
-                image_path = image.image.name
                 url = image.image.url
                 image_url = request.build_absolute_uri(url) if request else url
 
@@ -169,8 +143,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
                 'slug': p.slug,
                 'price': str(p.default_price),
                 'currency': p.currency,
-                'image': image_path,
-                'image_url': image_url
+                'image': image_url
             })
 
         return result

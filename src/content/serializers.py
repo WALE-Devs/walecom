@@ -6,8 +6,6 @@ from .models import Content, ContentBlock
 class ContentBlockSerializer(serializers.ModelSerializer):
     """Serializer for content sections (blocks) within a Content entry."""
 
-    image_url = serializers.SerializerMethodField(read_only=True)
-
     class Meta:
         model = ContentBlock
         fields = [
@@ -18,25 +16,12 @@ class ContentBlockSerializer(serializers.ModelSerializer):
             'subtitle',
             'content_text',
             'items',
-            'image_path',   # editable (stored in DB)
-            'image_url',    # computed (absolute URL)
+            'image',
             'order',
             'is_active',
             'type',
             'language',
         ]
-
-    def get_image_url(self, obj):
-        """
-        Builds an absolute URL for the image using MEDIA_URL and request context.
-        Returns None if no image_path is set.
-        """
-        if not obj.image_path:
-            return None
-
-        request = self.context.get('request')
-        relative_url = f"{settings.MEDIA_URL}{obj.image_path}"
-        return request.build_absolute_uri(relative_url) if request else relative_url
 
 
 class ContentSerializer(serializers.ModelSerializer):
