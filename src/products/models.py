@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from utils.slug_utils import unique_slugify
 
 
