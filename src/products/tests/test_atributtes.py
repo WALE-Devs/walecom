@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
 
-from products.models import Category, Attribute, AttributeValue, Product, ProductVariant
+from products.models import Category, Product, ProductVariant #, Attribute, AttributeValue
 
 pytestmark = pytest.mark.skip(reason="Legacy models Attribute/AttributeValue missing")
 
