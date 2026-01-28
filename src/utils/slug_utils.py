@@ -7,7 +7,7 @@ def generate_nonce(length=4):
     alphabet = string.ascii_lowercase + string.digits
     return ''.join(secrets.choice(alphabet) for _ in range(length))
 
-def unique_slugify(instance, value, slug_field_name='slug'):
+def unique_slugify(value):
     """
     Generates a unique slug by appending a random nonce.
     This avoids expensive database lookups and race conditions.

@@ -21,7 +21,7 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = unique_slugify(self, self.name)
+            self.slug = unique_slugify(self.name)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -41,7 +41,7 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = unique_slugify(self, self.name)
+            self.slug = unique_slugify(self.name)
         super().save(*args, **kwargs)
 
     def __str__(self):

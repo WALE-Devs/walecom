@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -18,7 +19,11 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load environment variables
-ENVIRONMENT = os.getenv("DJANGO_ENV", "dev")
+# Auto-detect pytest to use test environment
+if 'pytest' in sys.modules:
+    ENVIRONMENT = 'test'
+else:
+    ENVIRONMENT = os.getenv("DJANGO_ENV", "dev")
 env_file = BASE_DIR.parent / f".env.{ENVIRONMENT}"
 
 if env_file.exists():
