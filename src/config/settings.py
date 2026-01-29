@@ -153,24 +153,34 @@ MEDIA_ROOT = BASE_DIR / "media"   # Directory where files are storaged
 MEDIA_URL = "/media/"             # URL to access from navigator
 
 # Storage backend
-STORAGES = {
-    "default": {
-        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-        "OPTIONS": {
-            "access_key": os.getenv("AWS_ACCESS_KEY_ID"),
-            "secret_key": os.getenv("AWS_SECRET_ACCESS_KEY"),
-            "bucket_name": os.getenv("AWS_STORAGE_BUCKET_NAME"),
-            "endpoint_url": os.getenv("AWS_S3_ENDPOINT_URL"),
-            "region_name": os.getenv("AWS_S3_REGION_NAME", "us-east-1"),
-            "signature_version": os.getenv("AWS_S3_SIGNATURE_VERSION", "s3v4"),
-            "custom_domain": os.getenv("AWS_S3_CUSTOM_DOMAIN"),
-            "url_protocol": os.getenv("AWS_S3_URL_PROTOCOL", "https:"),
+if ENVIRONMENT == 'test':
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
         },
-    },
-    "staticfiles": {
-        "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
-    },
-}
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "OPTIONS": {
+                "access_key": os.getenv("AWS_ACCESS_KEY_ID"),
+                "secret_key": os.getenv("AWS_SECRET_ACCESS_KEY"),
+                "bucket_name": os.getenv("AWS_STORAGE_BUCKET_NAME"),
+                "endpoint_url": os.getenv("AWS_S3_ENDPOINT_URL"),
+                "region_name": os.getenv("AWS_S3_REGION_NAME", "us-east-1"),
+                "signature_version": os.getenv("AWS_S3_SIGNATURE_VERSION", "s3v4"),
+                "custom_domain": os.getenv("AWS_S3_CUSTOM_DOMAIN"),
+                "url_protocol": os.getenv("AWS_S3_URL_PROTOCOL", "https:"),
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+        },
+    }
 
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 AWS_DEFAULT_ACL = None
