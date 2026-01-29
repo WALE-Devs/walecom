@@ -1,0 +1,58 @@
+[
+    {
+        "model": "products.product",
+        "pk": 1,
+        "fields": {
+            "name": "Bolso tote ecológico",
+            "slug": "bolso-tote-ecologico",
+            "description": "Bolso tote reutilizable hecho con materiales reciclados.",
+            "base_sku": "BTE",
+            "category": 4,
+            "currency": "PEN",
+            "default_price": "59.90",
+            "default_stock": 50,
+            "tags": [
+                6,
+                7,
+                8
+            ]
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 2,
+        "fields": {
+            "name": "Zapatilla Urbana Negra",
+            "slug": "zapatilla-urbana-negra",
+            "description": "Zapatillas de diseño urbano con suela antideslizante y plantilla acolchada.",
+            "base_sku": "ZUN",
+            "category": 3,
+            "currency": "PEN",
+            "default_price": "199.90",
+            "default_stock": 90,
+            "tags": [
+                4,
+                5
+            ]
+        }
+    },
+    {
+        "model": "products.product",
+        "pk": 3,
+        "fields": {
+            "name": "Camiseta básica blanca",
+            "slug": "camiseta-basica-blanca",
+            "description": "Camiseta 100% algodón orgánico. Suave, fresca y cómoda para el día a día.",
+            "base_sku": "CBB",
+            "category": 2,
+            "currency": "PEN",
+            "default_price": "49.90",
+            "default_stock": 150,
+            "tags": [
+                1,
+                2,
+                3
+            ]
+        }
+    }
+]

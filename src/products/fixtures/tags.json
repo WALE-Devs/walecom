@@ -1,0 +1,86 @@
+[
+    {
+        "model": "products.tag",
+        "pk": 1,
+        "fields": {
+            "name": "ropa"
+        }
+    },
+    {
+        "model": "products.tag",
+        "pk": 2,
+        "fields": {
+            "name": "básico"
+        }
+    },
+    {
+        "model": "products.tag",
+        "pk": 3,
+        "fields": {
+            "name": "algodón"
+        }
+    },
+    {
+        "model": "products.tag",
+        "pk": 4,
+        "fields": {
+            "name": "calzado"
+        }
+    },
+    {
+        "model": "products.tag",
+        "pk": 5,
+        "fields": {
+            "name": "urbano"
+        }
+    },
+    {
+        "model": "products.tag",
+        "pk": 6,
+        "fields": {
+            "name": "accesorios"
+        }
+    },
+    {
+        "model": "products.tag",
+        "pk": 7,
+        "fields": {
+            "name": "eco"
+        }
+    },
+    {
+        "model": "products.tag",
+        "pk": 8,
+        "fields": {
+            "name": "bolso"
+        }
+    },
+    {
+        "model": "products.tag",
+        "pk": 9,
+        "fields": {
+            "name": "chaqueta"
+        }
+    },
+    {
+        "model": "products.tag",
+        "pk": 10,
+        "fields": {
+            "name": "unisex"
+        }
+    },
+    {
+        "model": "products.tag",
+        "pk": 11,
+        "fields": {
+            "name": "nuevo"
+        }
+    },
+    {
+        "model": "products.tag",
+        "pk": 12,
+        "fields": {
+            "name": "oferta"
+        }
+    }
+]

@@ -1,0 +1,38 @@
+[
+    {
+        "model": "products.category",
+        "pk": 1,
+        "fields": {
+            "name": "General",
+            "slug": "general",
+            "description": "Categoría general para pruebas"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 2,
+        "fields": {
+            "name": "Ropa",
+            "slug": "ropa",
+            "description": "Prendas de vestir para todas las estaciones"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 3,
+        "fields": {
+            "name": "Calzado",
+            "slug": "calzado",
+            "description": "Zapatos, zapatillas y sandalias"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 4,
+        "fields": {
+            "name": "Accesorios",
+            "slug": "accesorios",
+            "description": "Bolsos, mochilas y complementos"
+        }
+    }
+]

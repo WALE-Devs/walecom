@@ -1,0 +1,97 @@
+[
+    {
+        "model": "products.attribute",
+        "pk": 1,
+        "fields": {
+            "name": "Color"
+        }
+    },
+    {
+        "model": "products.attribute",
+        "pk": 2,
+        "fields": {
+            "name": "Talla"
+        }
+    },
+    {
+        "model": "products.attributevalue",
+        "pk": 1,
+        "fields": {
+            "attribute": 1,
+            "value": "Negro",
+            "sku_code": "NEG"
+        }
+    },
+    {
+        "model": "products.attributevalue",
+        "pk": 2,
+        "fields": {
+            "attribute": 1,
+            "value": "Blanco",
+            "sku_code": "BLA"
+        }
+    },
+    {
+        "model": "products.attributevalue",
+        "pk": 3,
+        "fields": {
+            "attribute": 1,
+            "value": "Beige",
+            "sku_code": "BEI"
+        }
+    },
+    {
+        "model": "products.attributevalue",
+        "pk": 4,
+        "fields": {
+            "attribute": 2,
+            "value": "S",
+            "sku_code": "S"
+        }
+    },
+    {
+        "model": "products.attributevalue",
+        "pk": 5,
+        "fields": {
+            "attribute": 2,
+            "value": "M",
+            "sku_code": "M"
+        }
+    },
+    {
+        "model": "products.attributevalue",
+        "pk": 6,
+        "fields": {
+            "attribute": 2,
+            "value": "L",
+            "sku_code": "L"
+        }
+    },
+    {
+        "model": "products.attributevalue",
+        "pk": 7,
+        "fields": {
+            "attribute": 2,
+            "value": "40",
+            "sku_code": "40"
+        }
+    },
+    {
+        "model": "products.attributevalue",
+        "pk": 8,
+        "fields": {
+            "attribute": 2,
+            "value": "41",
+            "sku_code": "41"
+        }
+    },
+    {
+        "model": "products.attributevalue",
+        "pk": 9,
+        "fields": {
+            "attribute": 2,
+            "value": "42",
+            "sku_code": "42"
+        }
+    }
+]

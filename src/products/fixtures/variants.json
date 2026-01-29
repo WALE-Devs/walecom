@@ -1,0 +1,44 @@
+[
+    {
+        "model": "products.productvariant",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "name": "Única",
+            "sku": "BTE-UNI",
+            "price": "59.90",
+            "stock": 50,
+            "attribute_values": []
+        }
+    },
+    {
+        "model": "products.productvariant",
+        "pk": 2,
+        "fields": {
+            "product": 2,
+            "name": "Negro 42",
+            "sku": "ZUN-NEG-42",
+            "price": "199.90",
+            "stock": 20,
+            "attribute_values": [
+                1,
+                9
+            ]
+        }
+    },
+    {
+        "model": "products.productvariant",
+        "pk": 3,
+        "fields": {
+            "product": 3,
+            "name": "Blanco S",
+            "sku": "CBB-BLA-S",
+            "price": "49.90",
+            "stock": 50,
+            "attribute_values": [
+                2,
+                4
+            ]
+        }
+    }
+]

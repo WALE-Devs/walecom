@@ -1,0 +1,29 @@
+[
+    {
+        "model": "products.productimage",
+        "pk": 1,
+        "fields": {
+            "product": 1,
+            "image": "products/bte.jpg",
+            "position": 0
+        }
+    },
+    {
+        "model": "products.productimage",
+        "pk": 2,
+        "fields": {
+            "product": 2,
+            "image": "products/zun.jpg",
+            "position": 0
+        }
+    },
+    {
+        "model": "products.productimage",
+        "pk": 3,
+        "fields": {
+            "product": 3,
+            "image": "products/cbb.png",
+            "position": 0
+        }
+    }
+]
