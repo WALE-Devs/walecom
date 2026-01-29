@@ -5,6 +5,7 @@ from django.db.models import Prefetch
 from .models import Product, ProductVariant, ProductImage
 from .serializers import ProductListSerializer, ProductDetailSerializer, ProductImageSerializer
 from .filters import ProductFilter
+from .pagination import StandardResultsSetPagination
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -12,6 +13,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = ProductFilter
     search_fields = ['name']
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         base_qs = Product.objects.select_related('category')
