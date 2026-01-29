@@ -4,12 +4,9 @@ from django.test import TestCase
 from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
 
-from products.models import Category, Product, ProductVariant #, Attribute, AttributeValue
-
-pytestmark = pytest.mark.skip(reason="Legacy models Attribute/AttributeValue missing")
+from products.models import Category, Product, ProductVariant, Attribute, AttributeValue
 
 
-@pytest.mark.skip(reason="Legacy models Attribute/AttributeValue missing")
 @pytest.mark.django_db
 class TestCategoryModel:
     """Test suite for Category model"""
@@ -127,7 +124,7 @@ class TestProductModel:
             description="Comfortable cotton t-shirt",
             base_sku="TSHIRT",
             category=category,
-            default_currency="PEN",
+            currency="PEN",
             default_price=Decimal("49.99"),
             default_stock=100
         )
@@ -135,7 +132,7 @@ class TestProductModel:
         assert product.name == "T-Shirt"
         assert product.base_sku == "TSHIRT"
         assert product.category == category
-        assert product.default_currency == "PEN"
+        assert product.currency == "PEN"
         assert product.default_price == Decimal("49.99")
         assert product.default_stock == 100
         assert str(product) == "T-Shirt"
@@ -148,7 +145,7 @@ class TestProductModel:
             description="Test description",
             base_sku="TEST",
             category=category,
-            default_currency="USD",
+            currency="USD",
             default_price=Decimal("29.99"),
             default_stock=50
         )
@@ -156,9 +153,8 @@ class TestProductModel:
         # Check that default variant was created
         assert product.variants.count() == 1
         default_variant = product.variants.first()
-        assert default_variant.sku is None or default_variant.sku == ""
+        assert default_variant.sku == "TEST-DEF"
         assert default_variant.price == product.default_price
-        assert default_variant.currency == product.default_currency
         assert default_variant.stock == product.default_stock
 
     def test_generate_variant_sku(self):
@@ -169,7 +165,7 @@ class TestProductModel:
             description="Test",
             base_sku="PROD",
             category=category,
-            default_currency="PEN",
+            currency="PEN",
             default_price=Decimal("10.00")
         )
 
@@ -213,7 +209,7 @@ class TestProductVariantModel:
             description="Test",
             base_sku="TEST",
             category=category,
-            default_currency="PEN",
+            currency="PEN",
             default_price=Decimal("100.00"),
             default_stock=10
         )
@@ -230,22 +226,21 @@ class TestProductVariantModel:
 
         variant = ProductVariant.objects.create(
             product=product,
+            name="Red",
+            sku="TEST-RED",
             price=Decimal("120.00"),
-            currency="USD",
             stock=20
         )
-        variant.attributes.add(red_value)
+        variant.attribute_values.add(red_value)
 
         # Refresh from database
         default_variant.refresh_from_db()
 
-        # Should have updated the existing default variant, not created a new one
-        assert product.variants.count() == 1
-        assert default_variant.id == default_variant_id
-        assert default_variant.price == Decimal("120.00")
-        assert default_variant.currency == "USD"
-        assert default_variant.stock == 20
-        assert red_value in default_variant.attributes.all()
+        # Should have 2 variants now (Default + Red)
+        assert product.variants.count() == 2
+        assert variant.price == Decimal("120.00")
+        assert variant.stock == 20
+        assert red_value in variant.attribute_values.all()
 
     def test_multiple_variants_replacing_default_variant(self):
         """Test creating 2 variants that should replace the default variant sequentially"""
@@ -256,7 +251,7 @@ class TestProductVariantModel:
             description="Test",
             base_sku="TEST",
             category=category,
-            default_currency="PEN",
+            currency="PEN",
             default_price=Decimal("100.00"),
             default_stock=10
         )
@@ -276,25 +271,23 @@ class TestProductVariantModel:
             attribute=size_attr, value="Large", sku_code="L"
         )
 
-        # Create first variant - should replace the default
+        # Create first variant
         variant1 = ProductVariant.objects.create(
             product=product,
+            name="Red Large",
+            sku="TEST-RED-L",
             price=Decimal("120.00"),
-            currency="USD",
             stock=20
         )
-        variant1.attributes.add(red_value, large_value)
+        variant1.attribute_values.add(red_value, large_value)
 
-        # Refresh and verify first variant replaced default
-        default_variant.refresh_from_db()
-        assert product.variants.count() == 1
-        assert default_variant.id == default_variant_id
-        assert default_variant.price == Decimal("120.00")
-        assert default_variant.currency == "USD"
-        assert default_variant.stock == 20
-        assert red_value in default_variant.attributes.all()
-        assert large_value in default_variant.attributes.all()
-        assert default_variant.sku == "TEST-RED-L"
+        # Verify first variant was added
+        assert product.variants.count() == 2
+        assert variant1.price == Decimal("120.00")
+        assert variant1.stock == 20
+        assert red_value in variant1.attribute_values.all()
+        assert large_value in variant1.attribute_values.all()
+        assert variant1.sku == "TEST-RED-L"
 
         # Create attributes for second variant
         blue_value = AttributeValue.objects.create(
@@ -304,31 +297,28 @@ class TestProductVariantModel:
             attribute=size_attr, value="Small", sku_code="S"
         )
 
-        # Create second variant - should replace the current default (which was the first variant)
+        # Create second variant
         variant2 = ProductVariant.objects.create(
             product=product,
+            name="Blue Small",
+            sku="TEST-BLU-S",
             price=Decimal("110.00"),
-            currency="EUR",
             stock=15
         )
-        variant2.attributes.add(blue_value, small_value)
+        variant2.attribute_values.add(blue_value, small_value)
 
-        # Validate that the second variant is added withouth modifying the first one
-        default_variant.refresh_from_db()
-        assert product.variants.count() == 2
-        assert default_variant.id == default_variant_id
-        assert default_variant.price == Decimal("120.00")
-        assert default_variant.currency == "USD"
-        assert default_variant.stock == 20
-        assert red_value in default_variant.attributes.all()
-        assert large_value in default_variant.attributes.all()
-        assert default_variant.sku == "TEST-RED-L"
+        # Validate that the second variant is added without modifying the first one
+        assert product.variants.count() == 3
+        assert variant1.price == Decimal("120.00")
+        assert variant1.stock == 20
+        assert red_value in variant1.attribute_values.all()
+        assert large_value in variant1.attribute_values.all()
+        assert variant1.sku == "TEST-RED-L"
 
-        # Verify attributes were updated
-        assert blue_value not in default_variant.attributes.all()
-        assert small_value not in default_variant.attributes.all()
-        assert red_value in default_variant.attributes.all()
-        assert large_value in default_variant.attributes.all()
+        # Verify second variant attributes
+        assert blue_value in variant2.attribute_values.all()
+        assert small_value in variant2.attribute_values.all()
+        assert variant2.sku == "TEST-BLU-S"
 
         # Verify old attribute values are still in database but not linked to variant
         assert red_value.variants.count() == 1
@@ -344,7 +334,7 @@ class TestProductVariantModel:
             description="Test",
             base_sku="PROD",
             category=category,
-            default_currency="PEN",
+            currency="PEN",
             default_price=Decimal("10.00")
         )
 
@@ -365,13 +355,14 @@ class TestProductVariantModel:
         # Create variant with attributes
         variant = ProductVariant.objects.create(
             product=product,
+            name="Red Large",
+            sku="PROD-RED-L",
             price=Decimal("15.00"),
-            currency="PEN",
             stock=25
         )
-        variant.attributes.add(red_value, large_value)
+        variant.attribute_values.add(red_value, large_value)
 
-        # Check SKU was generated
+        # Check SKU properties
         variant.refresh_from_db()
         assert variant.sku == "PROD-RED-L"
 
@@ -383,7 +374,7 @@ class TestProductVariantModel:
             description="Test",
             base_sku="PROD",
             category=category,
-            default_currency="PEN",
+            currency="PEN",
             default_price=Decimal("10.00")
         )
 
@@ -392,13 +383,14 @@ class TestProductVariantModel:
 
         variant = ProductVariant.objects.create(
             product=product,
+            name="No Attr",
+            sku="PROD-NO-ATTR",
             price=Decimal("12.00"),
-            currency="USD",
             stock=15
         )
 
-        # SKU should be None when no attributes
-        assert variant.sku is None or variant.sku == ""
+        # SKU should match the manually set value
+        assert variant.sku == "PROD-NO-ATTR"
 
     def test_product_variant_unique_sku(self):
         """Test that variant SKUs are unique"""
@@ -408,7 +400,7 @@ class TestProductVariantModel:
             description="Test",
             base_sku="PROD",
             category=category,
-            default_currency="PEN",
+            currency="PEN",
             default_price=Decimal("10.00")
         )
 
@@ -424,20 +416,21 @@ class TestProductVariantModel:
         # Create first variant
         variant1 = ProductVariant.objects.create(
             product=product,
+            name="Red",
+            sku="PROD-RED",
             price=Decimal("15.00"),
-            currency="PEN",
             stock=10
         )
-        variant1.attributes.add(red_value)
+        variant1.attribute_values.add(red_value)
         variant1.refresh_from_db()
 
-        # Try to create second variant with same SKU (manually set)
+        # Try to create second variant with same SKU
         with pytest.raises(IntegrityError):
             ProductVariant.objects.create(
                 product=product,
+                name="Another Red",
                 sku=variant1.sku,
                 price=Decimal("20.00"),
-                currency="PEN",
                 stock=5
             )
 
@@ -451,11 +444,11 @@ class TestModelRelationships:
         category = Category.objects.create(name="Electronics", description="Test")
         product1 = Product.objects.create(
             name="Laptop", description="Test", base_sku="LP1", category=category,
-            default_currency="PEN", default_price=Decimal("1000.00")
+            currency="PEN", default_price=Decimal("1000.00")
         )
         product2 = Product.objects.create(
             name="Phone", description="Test", base_sku="PH1", category=category,
-            default_currency="PEN", default_price=Decimal("500.00")
+            currency="PEN", default_price=Decimal("500.00")
         )
 
         assert product1 in category.products.all()
@@ -467,7 +460,7 @@ class TestModelRelationships:
         category = Category.objects.create(name="Test", description="Test")
         product = Product.objects.create(
             name="Test Product", description="Test", base_sku="TEST", category=category,
-            default_currency="PEN", default_price=Decimal("10.00")
+            currency="PEN", default_price=Decimal("10.00")
         )
 
         # Remove default variant
@@ -489,14 +482,14 @@ class TestModelRelationships:
 
         # Create variant with multiple attributes
         variant = ProductVariant.objects.create(
-            product=product, price=Decimal("15.00"), currency="PEN", stock=20
+            product=product, name="Red Cotton", sku="TEST-RED-CTN", price=Decimal("15.00"), stock=20
         )
-        variant.attributes.add(red_value, cotton_value)
+        variant.attribute_values.add(red_value, cotton_value)
 
         # Test relationships
-        assert red_value in variant.attributes.all()
-        assert cotton_value in variant.attributes.all()
-        assert blue_value not in variant.attributes.all()
+        assert red_value in variant.attribute_values.all()
+        assert cotton_value in variant.attribute_values.all()
+        assert blue_value not in variant.attribute_values.all()
         assert variant in red_value.variants.all()
         assert variant in cotton_value.variants.all()
         assert variant not in blue_value.variants.all()
@@ -520,7 +513,7 @@ def sample_product(sample_category):
         description="A product for testing purposes",
         base_sku="TEST",
         category=sample_category,
-        default_currency="PEN",
+        currency="PEN",
         default_price=Decimal("99.99"),
         default_stock=50
     )

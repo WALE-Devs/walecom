@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.db.models import Prefetch
 from django.conf import settings
-from .models import Product, ProductImage, ProductVariant, Tag
+from .models import Product, ProductImage, ProductVariant, Tag, Attribute, AttributeValue
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -16,6 +16,9 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 
 class ProductVariantSerializer(serializers.ModelSerializer):
+    attributes = serializers.DictField(child=serializers.CharField(), write_only=True, required=False)
+    attribute_values_display = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = ProductVariant
         fields = [
@@ -23,8 +26,33 @@ class ProductVariantSerializer(serializers.ModelSerializer):
             'name',
             'sku',
             'price',
-            'stock'
+            'stock',
+            'attributes',
+            'attribute_values_display'
         ]
+
+    def get_attribute_values_display(self, obj):
+        return {av.attribute.name: av.value for av in obj.attribute_values.all()}
+
+    def create(self, validated_data):
+        attributes_data = validated_data.pop('attributes', {})
+        variant = super().create(validated_data)
+        self._handle_attributes(variant, attributes_data)
+        return variant
+
+    def update(self, instance, validated_data):
+        attributes_data = validated_data.pop('attributes', None)
+        variant = super().update(instance, validated_data)
+        if attributes_data is not None:
+            variant.attribute_values.clear()
+            self._handle_attributes(variant, attributes_data)
+        return variant
+
+    def _handle_attributes(self, variant, attributes_data):
+        for attr_name, attr_value in attributes_data.items():
+            attribute, _ = Attribute.objects.get_or_create(name=attr_name)
+            value_obj, _ = AttributeValue.objects.get_or_create(attribute=attribute, value=attr_value)
+            variant.attribute_values.add(value_obj)
 
 
 class ProductListSerializer(serializers.ModelSerializer):
@@ -165,8 +193,10 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
         # Handle variants
         if variants_data is not None:
-            for variant_data in variants_data:
-                ProductVariant.objects.create(product=product, **variant_data)
+            for v_data in variants_data:
+                v_serializer = ProductVariantSerializer(data=v_data)
+                v_serializer.is_valid(raise_exception=True)
+                v_serializer.save(product=product)
 
         return product
 
@@ -190,8 +220,10 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         # Update variants
         if variants_data is not None:
             instance.variants.all().delete()
-            for variant_data in variants_data:
-                ProductVariant.objects.create(product=instance, **variant_data)
+            for v_data in variants_data:
+                v_serializer = ProductVariantSerializer(data=v_data)
+                v_serializer.is_valid(raise_exception=True)
+                v_serializer.save(product=instance)
 
         return instance
     

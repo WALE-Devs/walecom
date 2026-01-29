@@ -31,13 +31,17 @@ def product(db):
 
 @pytest.fixture
 def variant(product):
-    return ProductVariant.objects.create(
+    # The signal creates a default variant, let's just update it for the test
+    variant, _ = ProductVariant.objects.update_or_create(
         product=product,
         name="Default",
-        sku="TEST-DEF",
-        price=10.00,
-        stock=10
+        defaults={
+            'sku': "TEST-DEF",
+            'price': 10.00,
+            'stock': 10
+        }
     )
+    return variant
 
 @pytest.mark.django_db
 class TestCartAPI:
