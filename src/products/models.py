@@ -17,6 +17,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "Categories"
+        ordering = ['id']
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -56,6 +57,9 @@ class Product(models.Model):
     currency = models.CharField(max_length=3, default="PEN")
     default_price = models.DecimalField(max_digits=10, decimal_places=2)
     default_stock = models.PositiveIntegerField(default=0, blank=True, null=True)
+
+    class Meta:
+        ordering = ['id']
 
     def save(self, *args, **kwargs):
         if not self.slug:
