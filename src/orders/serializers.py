@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from products.models import ProductVariant
 from products.serializers import ProductVariantSerializer
-from .models import Cart, CartProduct
+from .models import Cart, CartProduct, Order, OrderProduct
 
 class CartItemSerializer(serializers.ModelSerializer):
     product_variant = ProductVariantSerializer(read_only=True)
@@ -34,3 +34,34 @@ class CartSerializer(serializers.ModelSerializer):
 
     def get_total_items(self, obj):
         return sum(item.quantity for item in obj.items.all())
+
+
+class OrderProductSerializer(serializers.ModelSerializer):
+    product_name = serializers.ReadOnlyField(source='product_variant.product.name')
+    variant_name = serializers.ReadOnlyField(source='product_variant.name')
+
+    class Meta:
+        model = OrderProduct
+        fields = ['id', 'product_name', 'variant_name', 'quantity', 'price_at_purchase']
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    products = OrderProductSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'status', 'total_price', 'shipping_address', 
+            'billing_address', 'tracking_number', 'products', 
+            'created_at', 'updated_at'
+        ]
+
+
+class CheckoutSerializer(serializers.Serializer):
+    shipping_address = serializers.CharField(required=True)
+    billing_address = serializers.CharField(required=False)
+
+    def validate(self, data):
+        if not data.get('billing_address'):
+            data['billing_address'] = data['shipping_address']
+        return data

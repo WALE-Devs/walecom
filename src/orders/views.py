@@ -1,8 +1,10 @@
 from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Cart, CartProduct
-from .serializers import CartSerializer, CartItemSerializer
+from django.db import transaction
+from decimal import Decimal
+from .models import Cart, CartProduct, Order, OrderProduct
+from .serializers import CartSerializer, CartItemSerializer, OrderSerializer, CheckoutSerializer
 from products.models import ProductVariant
 
 class CartViewSet(viewsets.ModelViewSet):
@@ -92,3 +94,67 @@ class CartViewSet(viewsets.ModelViewSet):
         cart = self.get_object()
         cart.items.all().delete()
         return Response(CartSerializer(cart).data)
+
+
+class OrderViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).prefetch_related('products__product_variant__product')
+
+    @action(detail=False, methods=['post'])
+    def checkout(self, request):
+        """
+        Converts the current user's cart into an Order.
+        Expects: shipping_address (and optional billing_address)
+        """
+        serializer = CheckoutSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart_items = cart.items.select_related('product_variant').all()
+
+        if not cart_items:
+            return Response({"error": "El carrito está vacío"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            with transaction.atomic():
+                # 1. Total and stock check
+                total_price = Decimal('0.00')
+                for item in cart_items:
+                    if item.product_variant.stock < item.quantity:
+                        raise ValueError(f"Stock insuficiente para {item.product_variant.product.name}")
+                    total_price += item.product_variant.price * item.quantity
+
+                # 2. Create Order
+                order = Order.objects.create(
+                    user=request.user,
+                    status='PENDING',
+                    total_price=total_price,
+                    shipping_address=serializer.validated_data['shipping_address'],
+                    billing_address=serializer.validated_data['billing_address']
+                )
+
+                # 3. Create items, snap prices and decrement stock
+                for item in cart_items:
+                    OrderProduct.objects.create(
+                        order=order,
+                        product_variant=item.product_variant,
+                        quantity=item.quantity,
+                        price_at_purchase=item.product_variant.price
+                    )
+                    # Decrement stock
+                    variant = item.product_variant
+                    variant.stock -= item.quantity
+                    variant.save()
+
+                # 4. Clear Cart
+                cart.items.all().delete()
+
+                return Response(OrderSerializer(order).context.update({'request': request}) or OrderSerializer(order).data, status=status.HTTP_201_CREATED)
+
+        except ValueError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": "Error al procesar el pedido"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
