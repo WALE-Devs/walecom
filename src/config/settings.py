@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'storages',
+    'accounts',
     'products',
     'content',
     'orders',
@@ -182,9 +183,13 @@ else:
         },
     }
 
+
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False  # To avoid URLs with tokens
+
+# Custom User Model
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

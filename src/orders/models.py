@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from products.models import Product, ProductVariant
 
 
@@ -12,7 +12,7 @@ class Order(models.Model):
         ('CANCELLED', 'Cancelado'),
     )
 
-    user = models.ForeignKey(User, related_name='orders', on_delete=models.PROTECT)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='orders', on_delete=models.PROTECT)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     shipping_address = models.TextField()
@@ -48,7 +48,7 @@ class CartManager(models.Manager):
 
 
 class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
 
     objects = CartManager()
 
