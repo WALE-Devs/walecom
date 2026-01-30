@@ -6,13 +6,14 @@ from django.conf import settings
 from rest_framework.test import APIClient
 from products.models import Product, ProductImage
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 @pytest.mark.django_db
 class TestProductImages:
     def setup_method(self):
         self.client = APIClient()
-        self.user = User.objects.create_superuser(username='admin', email='a@b.com', password='password')
+        self.user = User.objects.create_superuser(email='admin@example.com', password='password')
         self.client.force_authenticate(user=self.user)
         
         self.product = Product.objects.create(

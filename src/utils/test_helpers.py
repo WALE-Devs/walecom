@@ -6,10 +6,12 @@ across content, orders, and products apps.
 """
 import pytest
 from decimal import Decimal
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from products.models import Product, ProductVariant, Category
 from orders.models import Cart, CartProduct
+
+User = get_user_model()
 
 
 # ============================================================================
@@ -30,7 +32,6 @@ def api_client():
 def user(db):
     """Creates a standard test user."""
     return User.objects.create_user(
-        username='testuser',
         email='test@example.com',
         password='password123'
     )
@@ -40,7 +41,6 @@ def user(db):
 def admin_user(db):
     """Creates an admin/superuser for testing admin-only endpoints."""
     return User.objects.create_superuser(
-        username='admin',
         email='admin@example.com',
         password='adminpass123'
     )
@@ -50,7 +50,6 @@ def admin_user(db):
 def normal_user(db):
     """Creates a normal (non-admin) user."""
     return User.objects.create_user(
-        username='normaluser',
         email='user@example.com',
         password='userpass123'
     )

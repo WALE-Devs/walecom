@@ -1,7 +1,8 @@
 import pytest
 from django.urls import reverse
 from rest_framework import status
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from products.models import Product, ProductVariant, Category
 from orders.models import Cart, CartProduct, Order, OrderProduct
 from decimal import Decimal

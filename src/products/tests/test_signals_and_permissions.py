@@ -2,7 +2,8 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from products.models import Product, ProductVariant, Category
 
 # All common fixtures (api_client, admin_user, normal_user, category)

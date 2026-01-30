@@ -22,7 +22,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Pedido {self.id} - {self.user.username}"
+        return f"Pedido {self.id} - {self.user.email}"
 
 
 class OrderProduct(models.Model):
@@ -53,7 +53,7 @@ class Cart(models.Model):
     objects = CartManager()
 
     def __str__(self):
-        return f"{self.user.username}'s cart "
+        return f"{self.user.email}'s cart "
 
 
 class CartProduct(models.Model):

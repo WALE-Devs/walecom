@@ -2,7 +2,8 @@ import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from products.models import Product, ProductVariant, Category
 from orders.models import Cart, CartProduct
 
@@ -40,7 +41,7 @@ class TestCartAPI:
 
     def test_update_quantity(self, authenticated_client, variant):
         # First add
-        cart = Cart.objects.create(user=User.objects.get(username='testuser'))
+        cart = Cart.objects.create(user=User.objects.get(email='test@example.com'))
         cart_item = CartProduct.objects.create(cart=cart, product_variant=variant, quantity=1)
         
         url = reverse('cart-update-quantity')
@@ -53,7 +54,7 @@ class TestCartAPI:
         assert cart_item.quantity == 5
 
     def test_remove_item(self, authenticated_client, variant):
-        cart = Cart.objects.create(user=User.objects.get(username='testuser'))
+        cart = Cart.objects.create(user=User.objects.get(email='test@example.com'))
         cart_item = CartProduct.objects.create(cart=cart, product_variant=variant, quantity=1)
         
         url = reverse('cart-remove-item')
@@ -64,7 +65,7 @@ class TestCartAPI:
         assert not CartProduct.objects.filter(id=cart_item.id).exists()
 
     def test_clear_cart(self, authenticated_client, variant):
-        cart = Cart.objects.create(user=User.objects.get(username='testuser'))
+        cart = Cart.objects.create(user=User.objects.get(email='test@example.com'))
         CartProduct.objects.create(cart=cart, product_variant=variant, quantity=1)
         
         url = reverse('cart-clear')

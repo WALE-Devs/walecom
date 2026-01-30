@@ -1,5 +1,6 @@
 import pytest
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from products.models import Product, Category, ProductVariant
 from orders.models import Order, OrderProduct, Cart, CartProduct
 
@@ -10,7 +11,7 @@ from orders.models import Order, OrderProduct, Cart, CartProduct
 class TestOrderModels:
     def test_order_str(self, user):
         order = Order.objects.create(user=user, total_price=100, shipping_address='Addr', billing_address='Addr')
-        assert str(order) == f"Pedido {order.id} - {user.username}"
+        assert str(order) == f"Pedido {order.id} - {user.email}"
 
     def test_order_product_str(self, user, variant):
         order = Order.objects.create(user=user, total_price=100, shipping_address='Addr', billing_address='Addr')
@@ -19,7 +20,7 @@ class TestOrderModels:
 
     def test_cart_str(self, user):
         cart, _ = Cart.objects.get_or_create(user=user)
-        assert str(cart) == f"{user.username}'s cart "
+        assert str(cart) == f"{user.email}'s cart "
 
     def test_cart_manager_create_from_products(self, user, variant):
         products_data = [
