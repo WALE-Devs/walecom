@@ -1,7 +1,13 @@
 from rest_framework import serializers
 from django.db.models import Prefetch
 from django.conf import settings
-from .models import Product, ProductImage, ProductVariant, Tag, Attribute, AttributeValue
+from .models import Product, ProductImage, ProductVariant, Tag, Attribute, AttributeValue, Category
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'slug', 'description']
 
 
 class ProductImageSerializer(serializers.ModelSerializer):

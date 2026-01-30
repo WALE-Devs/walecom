@@ -2,17 +2,29 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAdminUser, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Prefetch
-from .models import Product, ProductVariant, ProductImage
-from .serializers import ProductListSerializer, ProductDetailSerializer, ProductImageSerializer
+from .models import Product, ProductVariant, ProductImage, Category
+from .serializers import (
+    ProductListSerializer, 
+    ProductDetailSerializer, 
+    ProductImageSerializer,
+    CategorySerializer
+)
 from .filters import ProductFilter
 from .pagination import StandardResultsSetPagination
+
+
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [AllowAny]
+    lookup_field = 'slug'
 
 
 class ProductViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = ProductFilter
-    search_fields = ['name']
+    search_fields = ['name', 'description', 'category__name']
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
