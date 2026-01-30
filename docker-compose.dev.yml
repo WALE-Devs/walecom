@@ -8,8 +8,8 @@ services:
             target: development
         command: >
             sh -c "python manage.py migrate &&
-                python manage.py loaddata products/fixtures/products_init.json &&
-                python manage.py loaddata content/fixtures/content_init.json &&
+                python manage.py loaddata products categories tags attributes variants images &&
+                python manage.py loaddata content_init &&
                 python manage.py runserver 0.0.0.0:8000"
         depends_on:
             - db
