@@ -11,7 +11,29 @@ from rest_framework.test import APIClient
 from products.models import Product, ProductVariant, Category
 from orders.models import Cart, CartProduct
 
+import os
+import shutil
+import tempfile
+from django.conf import settings
+from django.test import override_settings
+
 User = get_user_model()
+
+
+@pytest.fixture(scope='session', autouse=True)
+def media_root_tmp(request):
+    """
+    Overrides MEDIA_ROOT with a temporary directory for the duration of the test session.
+    This prevents tests from polluting the real media folder.
+    """
+    tmp_dir = tempfile.mkdtemp()
+    
+    with override_settings(MEDIA_ROOT=tmp_dir):
+        yield tmp_dir
+        
+    # Cleanup after session
+    if os.path.exists(tmp_dir):
+        shutil.rmtree(tmp_dir)
 
 
 # ============================================================================
