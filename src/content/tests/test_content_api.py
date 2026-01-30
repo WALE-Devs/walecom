@@ -5,17 +5,8 @@ from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 from content.models import Content, ContentBlock
 
-@pytest.fixture
-def api_client():
-    return APIClient()
-
-@pytest.fixture
-def admin_user(db):
-    return User.objects.create_superuser(username='admin', email='admin@test.com', password='password123')
-
-@pytest.fixture
-def normal_user(db):
-    return User.objects.create_user(username='user', email='user@test.com', password='password123')
+# All common fixtures (api_client, admin_user, normal_user)
+# are now available from utils.test_helpers via conftest.py
 
 @pytest.mark.django_db
 class TestContentAPI:

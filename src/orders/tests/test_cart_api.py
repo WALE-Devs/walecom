@@ -6,42 +6,8 @@ from django.contrib.auth.models import User
 from products.models import Product, ProductVariant, Category
 from orders.models import Cart, CartProduct
 
-@pytest.fixture
-def api_client():
-    return APIClient()
-
-@pytest.fixture
-def user(db):
-    return User.objects.create_user(username='testuser', password='password123')
-
-@pytest.fixture
-def authenticated_client(api_client, user):
-    api_client.force_authenticate(user=user)
-    return api_client
-
-@pytest.fixture
-def product(db):
-    cat = Category.objects.create(name="Test Cat", slug="test-cat")
-    return Product.objects.create(
-        name="Test Product",
-        base_sku="TEST",
-        category=cat,
-        default_price=10.00
-    )
-
-@pytest.fixture
-def variant(product):
-    # The signal creates a default variant, let's just update it for the test
-    variant, _ = ProductVariant.objects.update_or_create(
-        product=product,
-        name="Default",
-        defaults={
-            'sku': "TEST-DEF",
-            'price': 10.00,
-            'stock': 10
-        }
-    )
-    return variant
+# All common fixtures (api_client, user, authenticated_client, product, variant, category)
+# are now available from utils.test_helpers via conftest.py
 
 @pytest.mark.django_db
 class TestCartAPI:
@@ -59,7 +25,7 @@ class TestCartAPI:
         response = authenticated_client.post(url, data)
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data['total_items'] == 2
-        assert response.data['total_price'] == 20.00
+        assert response.data['total_price'] == 200.00  # 2 * 100.00
         
         # Check database
         cart_item = CartProduct.objects.get(product_variant=variant)

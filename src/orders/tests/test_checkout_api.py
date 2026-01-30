@@ -6,39 +6,13 @@ from products.models import Product, ProductVariant, Category
 from orders.models import Cart, CartProduct, Order, OrderProduct
 from decimal import Decimal
 
-@pytest.fixture
-def api_client():
-    from rest_framework.test import APIClient
-    return APIClient()
+# All common fixtures (api_client, user, product, variant, category)
+# are now available from utils.test_helpers via conftest.py
 
 @pytest.fixture
-def user(db):
-    return User.objects.create_user(username='buyer', password='password123')
-
-@pytest.fixture
-def auth_client(api_client, user):
-    api_client.force_authenticate(user=user)
-    return api_client
-
-@pytest.fixture
-def product(db):
-    cat = Category.objects.create(name="Cat", slug="cat")
-    return Product.objects.create(
-        name="Pro", 
-        base_sku="PRO", 
-        category=cat, 
-        default_price=Decimal("100.00"),
-        default_stock=10
-    )
-
-@pytest.fixture
-def variant(product):
-    # System signal creates a default variant.
-    v = product.variants.first()
-    v.stock = 10
-    v.price = Decimal("100.00")
-    v.save()
-    return v
+def auth_client(authenticated_client):
+    """Alias for authenticated_client to match existing test naming."""
+    return authenticated_client
 
 @pytest.mark.django_db
 class TestCheckoutFlow:

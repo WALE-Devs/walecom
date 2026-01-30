@@ -7,3 +7,9 @@ CLAUDE.md
 src/media/
 .env*
 !.env.example
+.coverage
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+.conftests
