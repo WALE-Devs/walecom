@@ -1,8 +1,8 @@
 services:
 
     backend:
-        container_name: wale-ecom-back-dev
-        image: wale-ecom-back:dev
+        container_name: walecom
+        image: walecom:dev
         restart: unless-stopped
         build:
             target: development
