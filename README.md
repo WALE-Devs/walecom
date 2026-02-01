@@ -1,4 +1,4 @@
-# E-Commerce Backend MVP
+# WALEcom
 
 A robust e-commerce backend API built with Django 5.2 and Django REST Framework, featuring JWT authentication, product catalog management, order processing, and a flexible CMS for content pages.
 
@@ -48,8 +48,8 @@ src/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/WALE-Devs/ecommerce-backend-mvp
-   cd ecommerce-backend-mvp
+   git clone https://github.com/WALE-Devs/walecom
+   cd walecom
    ```
 
 2. **Create environment file**
