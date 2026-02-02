@@ -12,6 +12,7 @@ jobs:
     env:
       DJANGO_ENV: test
       SECRET_KEY: test_secret_key_for_ci
+      ALLOWED_HOSTS: "*"
       DATABASE_HOST: 127.0.0.1
       DATABASE_PORT: 5432
       DATABASE_NAME: walecom_test
