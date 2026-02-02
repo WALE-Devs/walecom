@@ -84,6 +84,8 @@ jobs:
 
       - name: Run migrations
         working-directory: ./src
+        env:
+          DJANGO_ENV: test
         run: |
           python manage.py migrate --no-input
 
