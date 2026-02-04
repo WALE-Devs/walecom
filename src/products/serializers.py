@@ -1,53 +1,58 @@
-from rest_framework import serializers
 from django.db.models import Prefetch
-from django.conf import settings
-from .models import Product, ProductImage, ProductVariant, Tag, Attribute, AttributeValue, Category
+from rest_framework import serializers
+
+from .models import (
+    Product,
+    ProductImage,
+    ProductVariant,
+    Tag,
+    Attribute,
+    AttributeValue,
+    Category,
+)
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug', 'description']
+        fields = ["id", "name", "slug", "description"]
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
-        fields = [
-            'id',
-            'product',
-            'image',
-            'position'
-        ]
+        fields = ["id", "product", "image", "position"]
 
 
 class ProductVariantSerializer(serializers.ModelSerializer):
-    attributes = serializers.DictField(child=serializers.CharField(), write_only=True, required=False)
+    attributes = serializers.DictField(
+        child=serializers.CharField(), write_only=True, required=False
+    )
     attribute_values_display = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = ProductVariant
         fields = [
-            'id',
-            'name',
-            'sku',
-            'price',
-            'stock',
-            'attributes',
-            'attribute_values_display'
+            "id",
+            "name",
+            "sku",
+            "price",
+            "stock",
+            "attributes",
+            "attribute_values_display",
         ]
 
     def get_attribute_values_display(self, obj):
         return {av.attribute.name: av.value for av in obj.attribute_values.all()}
 
     def create(self, validated_data):
-        attributes_data = validated_data.pop('attributes', {})
+        attributes_data = validated_data.pop("attributes", {})
         variant = super().create(validated_data)
         self._handle_attributes(variant, attributes_data)
         return variant
 
     def update(self, instance, validated_data):
-        attributes_data = validated_data.pop('attributes', None)
+        attributes_data = validated_data.pop("attributes", None)
         variant = super().update(instance, validated_data)
         if attributes_data is not None:
             variant.attribute_values.clear()
@@ -57,7 +62,9 @@ class ProductVariantSerializer(serializers.ModelSerializer):
     def _handle_attributes(self, variant, attributes_data):
         for attr_name, attr_value in attributes_data.items():
             attribute, _ = Attribute.objects.get_or_create(name=attr_name)
-            value_obj, _ = AttributeValue.objects.get_or_create(attribute=attribute, value=attr_value)
+            value_obj, _ = AttributeValue.objects.get_or_create(
+                attribute=attribute, value=attr_value
+            )
             variant.attribute_values.add(value_obj)
 
 
@@ -68,26 +75,26 @@ class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'id',
-            'name',
-            'slug',
-            'description',
-            'base_sku',
-            'category',
-            'currency',
-            'default_price',
-            'default_stock',
-            'image',
-            'tags',
+            "id",
+            "name",
+            "slug",
+            "description",
+            "base_sku",
+            "category",
+            "currency",
+            "default_price",
+            "default_stock",
+            "image",
+            "tags",
         ]
 
     def get_image(self, obj):
         """Returns the absolute URL of the main product image."""
-        image = obj.images.order_by('position').first()
+        image = obj.images.order_by("position").first()
         if not image or not image.image:
             return None
 
-        request = self.context.get('request')
+        request = self.context.get("request")
         url = image.image.url
         return request.build_absolute_uri(url) if request else url
 
@@ -100,40 +107,37 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
     variants = ProductVariantSerializer(many=True, required=False)
     tags = serializers.ListField(
-        child=serializers.CharField(),
-        required=False,
-        allow_empty=True,
-        write_only=True
+        child=serializers.CharField(), required=False, allow_empty=True, write_only=True
     )
     related_products = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = [
-            'id',
-            'name',
-            'slug',
-            'description',
-            'base_sku',
-            'category',
-            'currency',
-            'default_price',
-            'default_stock',
-            'tags',
-            'main_image',
-            'images',
-            'variants',
-            'related_products'
+            "id",
+            "name",
+            "slug",
+            "description",
+            "base_sku",
+            "category",
+            "currency",
+            "default_price",
+            "default_stock",
+            "tags",
+            "main_image",
+            "images",
+            "variants",
+            "related_products",
         ]
-        read_only_fields = ['slug']
+        read_only_fields = ["slug"]
 
     def get_main_image(self, obj):
         """Returns the absolute URL of the main image."""
-        image = obj.images.order_by('position').first()
+        image = obj.images.order_by("position").first()
         if not image or not image.image:
             return None
 
-        request = self.context.get('request')
+        request = self.context.get("request")
         url = image.image.url
         return request.build_absolute_uri(url) if request else url
 
@@ -153,39 +157,44 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 
         # query w/only, prefetch, limit 4
         related_qs = related_qs.only(
-            'id', 'name', 'slug', 'currency', 'default_price', 'base_sku'
+            "id", "name", "slug", "currency", "default_price", "base_sku"
         ).prefetch_related(
             Prefetch(
-                'images',
-                queryset=ProductImage.objects.only('image', 'position', 'product').order_by('position'),
+                "images",
+                queryset=ProductImage.objects.only(
+                    "image", "position", "product"
+                ).order_by("position"),
             )
-        )[:4]
+        )[
+            :4
+        ]
 
         # Serialize manually
-        request = self.context.get('request')
+        request = self.context.get("request")
         result = []
         for p in related_qs:
-            image = p.images.order_by('position').first()
+            image = p.images.order_by("position").first()
             image_url = None
             if image and image.image:
                 url = image.image.url
                 image_url = request.build_absolute_uri(url) if request else url
 
-            result.append({
-                'id': p.id,
-                'name': p.name,
-                'slug': p.slug,
-                'price': str(p.default_price),
-                'currency': p.currency,
-                'image': image_url
-            })
+            result.append(
+                {
+                    "id": p.id,
+                    "name": p.name,
+                    "slug": p.slug,
+                    "price": str(p.default_price),
+                    "currency": p.currency,
+                    "image": image_url,
+                }
+            )
 
         return result
 
-
     def create(self, validated_data):
-        variants_data = validated_data.pop('variants', None)
-        tags_data = validated_data.pop('tags', None)
+        variants_data = validated_data.pop("variants", None)
+        tags_data = validated_data.pop("tags", None)
 
         product = Product.objects.create(**validated_data)
 
@@ -207,8 +216,8 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         return product
 
     def update(self, instance, validated_data):
-        variants_data = validated_data.pop('variants', None)
-        tags_data = validated_data.pop('tags', None)
+        variants_data = validated_data.pop("variants", None)
+        tags_data = validated_data.pop("tags", None)
 
         # Update fields
         for attr, value in validated_data.items():
@@ -232,10 +241,8 @@ class ProductDetailSerializer(serializers.ModelSerializer):
                 v_serializer.save(product=instance)
 
         return instance
-    
+
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data['tags'] = [tag.name for tag in instance.tags.all()]
+        data["tags"] = [tag.name for tag in instance.tags.all()]
         return data
-
-

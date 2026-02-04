@@ -6,19 +6,22 @@ from .serializers import ContentSerializer, ContentBlockSerializer
 
 class ContentViewSet(viewsets.ModelViewSet):
     """Public + Admin API for main content entries"""
-    queryset = Content.objects.prefetch_related('blocks').order_by('identifier', 'language')
+
+    queryset = Content.objects.prefetch_related("blocks").order_by(
+        "identifier", "language"
+    )
     serializer_class = ContentSerializer
-    lookup_field = 'identifier'
+    lookup_field = "identifier"
 
     def get_permissions(self):
         # Allow public GET, restrict POST/PUT/PATCH/DELETE to staff
-        if self.action in ['list', 'retrieve']:
+        if self.action in ["list", "retrieve"]:
             return [AllowAny()]
         return [IsAdminUser()]
 
     def get_queryset(self):
         """Supports ?lang=xx filtering for language"""
-        lang = self.request.query_params.get('lang')
+        lang = self.request.query_params.get("lang")
         qs = super().get_queryset()
         if lang:
             qs = qs.filter(language=lang)
@@ -27,6 +30,7 @@ class ContentViewSet(viewsets.ModelViewSet):
 
 class ContentBlockViewSet(viewsets.ModelViewSet):
     """Admin-only API for managing blocks"""
-    queryset = ContentBlock.objects.select_related('content').order_by('order')
+
+    queryset = ContentBlock.objects.select_related("content").order_by("order")
     serializer_class = ContentBlockSerializer
     permission_classes = [IsAdminUser]

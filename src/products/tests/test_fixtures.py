@@ -2,13 +2,23 @@ import pytest
 from products.models import Category, Product
 
 
-@pytest.fixture()#scope='function')
+@pytest.fixture()  # scope='function')
 def products_fixture(db):
     """
     Fixture que carga automáticamente los datos de productos
     """
     from django.core.management import call_command
-    call_command('loaddata', 'categories', 'tags', 'attributes', 'products', 'variants', 'images', verbosity=0)
+
+    call_command(
+        "loaddata",
+        "categories",
+        "tags",
+        "attributes",
+        "products",
+        "variants",
+        "images",
+        verbosity=0,
+    )
 
 
 def test_load_fixture_automatico(products_fixture):

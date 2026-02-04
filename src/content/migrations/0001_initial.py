@@ -8,45 +8,70 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Content',
+            name="Content",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('identifier', models.SlugField()),
-                ('title', models.CharField(max_length=200)),
-                ('description', models.TextField(blank=True)),
-                ('language', models.CharField(default='es', max_length=5)),
-                ('is_active', models.BooleanField(default=True)),
-                ('last_updated', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("identifier", models.SlugField()),
+                ("title", models.CharField(max_length=200)),
+                ("description", models.TextField(blank=True)),
+                ("language", models.CharField(default="es", max_length=5)),
+                ("is_active", models.BooleanField(default=True)),
+                ("last_updated", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'ordering': ['identifier', 'language'],
-                'unique_together': {('identifier', 'language')},
+                "ordering": ["identifier", "language"],
+                "unique_together": {("identifier", "language")},
             },
         ),
         migrations.CreateModel(
-            name='ContentBlock',
+            name="ContentBlock",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('identifier', models.SlugField()),
-                ('title', models.CharField(blank=True, max_length=200)),
-                ('subtitle', models.CharField(blank=True, max_length=200)),
-                ('content_text', models.TextField(blank=True)),
-                ('items', models.JSONField(blank=True, default=list)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='content/')),
-                ('order', models.PositiveIntegerField(default=0)),
-                ('is_active', models.BooleanField(default=True)),
-                ('type', models.CharField(blank=True, max_length=50)),
-                ('language', models.CharField(default='es', max_length=5)),
-                ('content', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='blocks', to='content.content')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("identifier", models.SlugField()),
+                ("title", models.CharField(blank=True, max_length=200)),
+                ("subtitle", models.CharField(blank=True, max_length=200)),
+                ("content_text", models.TextField(blank=True)),
+                ("items", models.JSONField(blank=True, default=list)),
+                (
+                    "image",
+                    models.ImageField(blank=True, null=True, upload_to="content/"),
+                ),
+                ("order", models.PositiveIntegerField(default=0)),
+                ("is_active", models.BooleanField(default=True)),
+                ("type", models.CharField(blank=True, max_length=50)),
+                ("language", models.CharField(default="es", max_length=5)),
+                (
+                    "content",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="blocks",
+                        to="content.content",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['order'],
-                'unique_together': {('content', 'identifier', 'language')},
+                "ordering": ["order"],
+                "unique_together": {("content", "identifier", "language")},
             },
         ),
     ]

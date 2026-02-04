@@ -8,90 +8,202 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Attribute',
+            name="Attribute",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50, unique=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50, unique=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Tag',
+            name="Tag",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=30, unique=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=30, unique=True)),
             ],
         ),
         migrations.CreateModel(
-            name='AttributeValue',
+            name="AttributeValue",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('value', models.CharField(max_length=100)),
-                ('sku_code', models.CharField(blank=True, max_length=10, null=True)),
-                ('attribute', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='values', to='products.attribute')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("value", models.CharField(max_length=100)),
+                ("sku_code", models.CharField(blank=True, max_length=10, null=True)),
+                (
+                    "attribute",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="values",
+                        to="products.attribute",
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('attribute', 'value')},
+                "unique_together": {("attribute", "value")},
             },
         ),
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('slug', models.SlugField(blank=True, unique=True)),
-                ('description', models.TextField()),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='children', to='products.category')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("slug", models.SlugField(blank=True, unique=True)),
+                ("description", models.TextField()),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="children",
+                        to="products.category",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Categories',
-                'ordering': ['id'],
+                "verbose_name_plural": "Categories",
+                "ordering": ["id"],
             },
         ),
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('slug', models.SlugField(blank=True, unique=True)),
-                ('description', models.TextField()),
-                ('base_sku', models.CharField(max_length=50)),
-                ('currency', models.CharField(default='PEN', max_length=3)),
-                ('default_price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('default_stock', models.PositiveIntegerField(blank=True, default=0, null=True)),
-                ('category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='products', to='products.category')),
-                ('tags', models.ManyToManyField(blank=True, related_name='products', to='products.tag')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("slug", models.SlugField(blank=True, unique=True)),
+                ("description", models.TextField()),
+                ("base_sku", models.CharField(max_length=50)),
+                ("currency", models.CharField(default="PEN", max_length=3)),
+                ("default_price", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "default_stock",
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
+                ),
+                (
+                    "category",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="products",
+                        to="products.category",
+                    ),
+                ),
+                (
+                    "tags",
+                    models.ManyToManyField(
+                        blank=True, related_name="products", to="products.tag"
+                    ),
+                ),
             ],
             options={
-                'ordering': ['id'],
+                "ordering": ["id"],
             },
         ),
         migrations.CreateModel(
-            name='ProductImage',
+            name="ProductImage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, null=True, upload_to='products/')),
-                ('position', models.PositiveIntegerField(default=0)),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='products.product')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "image",
+                    models.ImageField(blank=True, null=True, upload_to="products/"),
+                ),
+                ("position", models.PositiveIntegerField(default=0)),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="images",
+                        to="products.product",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['position'],
+                "ordering": ["position"],
             },
         ),
         migrations.CreateModel(
-            name='ProductVariant',
+            name="ProductVariant",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('sku', models.CharField(max_length=50, unique=True)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('stock', models.PositiveIntegerField(default=0)),
-                ('attribute_values', models.ManyToManyField(blank=True, related_name='variants', to='products.attributevalue')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='variants', to='products.product')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("sku", models.CharField(max_length=50, unique=True)),
+                ("price", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("stock", models.PositiveIntegerField(default=0)),
+                (
+                    "attribute_values",
+                    models.ManyToManyField(
+                        blank=True,
+                        related_name="variants",
+                        to="products.attributevalue",
+                    ),
+                ),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="variants",
+                        to="products.product",
+                    ),
+                ),
             ],
         ),
     ]

@@ -1,10 +1,8 @@
 import pytest
 from decimal import Decimal
-from django.test import TestCase
-from django.db.utils import IntegrityError
-from django.core.exceptions import ValidationError
 
-from products.models import Category, Product, ProductVariant, Attribute, AttributeValue
+from django.db.utils import IntegrityError
+from products.models import Attribute, AttributeValue, Category, Product, ProductVariant
 
 
 @pytest.mark.django_db
@@ -14,8 +12,7 @@ class TestCategoryModel:
     def test_category_creation(self):
         """Test creating a simple category"""
         category = Category.objects.create(
-            name="Electronics",
-            description="Electronic devices and gadgets"
+            name="Electronics", description="Electronic devices and gadgets"
         )
         assert category.name == "Electronics"
         assert category.description == "Electronic devices and gadgets"
@@ -25,13 +22,10 @@ class TestCategoryModel:
     def test_category_with_parent(self):
         """Test creating a category with a parent"""
         parent = Category.objects.create(
-            name="Computers",
-            description="Computer equipment"
+            name="Computers", description="Computer equipment"
         )
         child = Category.objects.create(
-            name="Laptops",
-            description="Portable computers",
-            parent=parent
+            name="Laptops", description="Portable computers", parent=parent
         )
         assert child.parent == parent
         assert child in parent.children.all()
@@ -66,9 +60,7 @@ class TestAttributeValueModel:
         """Test creating an attribute value"""
         attribute = Attribute.objects.create(name="Color")
         attr_value = AttributeValue.objects.create(
-            attribute=attribute,
-            value="Red",
-            sku_code="RED"
+            attribute=attribute, value="Red", sku_code="RED"
         )
         assert attr_value.attribute == attribute
         assert attr_value.value == "Red"
@@ -78,30 +70,20 @@ class TestAttributeValueModel:
     def test_attribute_value_unique_constraint(self):
         """Test unique constraint on attribute-value combination"""
         attribute = Attribute.objects.create(name="Size")
-        AttributeValue.objects.create(
-            attribute=attribute,
-            value="Large",
-            sku_code="L"
-        )
+        AttributeValue.objects.create(attribute=attribute, value="Large", sku_code="L")
         with pytest.raises(IntegrityError):
             AttributeValue.objects.create(
-                attribute=attribute,
-                value="Large",
-                sku_code="LRG"
+                attribute=attribute, value="Large", sku_code="LRG"
             )
 
     def test_attribute_value_relationship(self):
         """Test relationship between attribute and its values"""
         attribute = Attribute.objects.create(name="Material")
         value1 = AttributeValue.objects.create(
-            attribute=attribute,
-            value="Cotton",
-            sku_code="CTN"
+            attribute=attribute, value="Cotton", sku_code="CTN"
         )
         value2 = AttributeValue.objects.create(
-            attribute=attribute,
-            value="Polyester",
-            sku_code="POL"
+            attribute=attribute, value="Polyester", sku_code="POL"
         )
 
         assert value1 in attribute.values.all()
@@ -116,8 +98,7 @@ class TestProductModel:
     def test_product_creation(self):
         """Test creating a product"""
         category = Category.objects.create(
-            name="Clothing",
-            description="Apparel and accessories"
+            name="Clothing", description="Apparel and accessories"
         )
         product = Product.objects.create(
             name="T-Shirt",
@@ -126,7 +107,7 @@ class TestProductModel:
             category=category,
             currency="PEN",
             default_price=Decimal("49.99"),
-            default_stock=100
+            default_stock=100,
         )
 
         assert product.name == "T-Shirt"
@@ -147,7 +128,7 @@ class TestProductModel:
             category=category,
             currency="USD",
             default_price=Decimal("29.99"),
-            default_stock=50
+            default_stock=50,
         )
 
         # Check that default variant was created
@@ -166,7 +147,7 @@ class TestProductModel:
             base_sku="PROD",
             category=category,
             currency="PEN",
-            default_price=Decimal("10.00")
+            default_price=Decimal("10.00"),
         )
 
         # Create attributes
@@ -191,7 +172,9 @@ class TestProductModel:
         # Test with different order (should be ordered by attribute name)
         # Test with reverse order in list
         attr_values_reversed = [large_value, red_value]
-        queryset_reversed = AttributeValue.objects.filter(id__in=[av.id for av in attr_values_reversed])
+        queryset_reversed = AttributeValue.objects.filter(
+            id__in=[av.id for av in attr_values_reversed]
+        )
 
         sku_ordered = product.generate_variant_sku(queryset_reversed)
         assert sku_ordered == "PROD-RED-L"  # Color comes before Size alphabetically
@@ -211,12 +194,11 @@ class TestProductVariantModel:
             category=category,
             currency="PEN",
             default_price=Decimal("100.00"),
-            default_stock=10
+            default_stock=10,
         )
 
         # Get the default variant created by signal
         default_variant = product.variants.first()
-        default_variant_id = default_variant.id
 
         # Create a new variant that should replace the default
         color_attr = Attribute.objects.create(name="Color")
@@ -229,7 +211,7 @@ class TestProductVariantModel:
             name="Red",
             sku="TEST-RED",
             price=Decimal("120.00"),
-            stock=20
+            stock=20,
         )
         variant.attribute_values.add(red_value)
 
@@ -253,12 +235,8 @@ class TestProductVariantModel:
             category=category,
             currency="PEN",
             default_price=Decimal("100.00"),
-            default_stock=10
+            default_stock=10,
         )
-
-        # Get the default variant created by signal
-        default_variant = product.variants.first()
-        default_variant_id = default_variant.id
 
         # Create attributes for first variant
         color_attr = Attribute.objects.create(name="Color")
@@ -277,7 +255,7 @@ class TestProductVariantModel:
             name="Red Large",
             sku="TEST-RED-L",
             price=Decimal("120.00"),
-            stock=20
+            stock=20,
         )
         variant1.attribute_values.add(red_value, large_value)
 
@@ -303,7 +281,7 @@ class TestProductVariantModel:
             name="Blue Small",
             sku="TEST-BLU-S",
             price=Decimal("110.00"),
-            stock=15
+            stock=15,
         )
         variant2.attribute_values.add(blue_value, small_value)
 
@@ -335,7 +313,7 @@ class TestProductVariantModel:
             base_sku="PROD",
             category=category,
             currency="PEN",
-            default_price=Decimal("10.00")
+            default_price=Decimal("10.00"),
         )
 
         # Remove default variant to test clean creation
@@ -358,7 +336,7 @@ class TestProductVariantModel:
             name="Red Large",
             sku="PROD-RED-L",
             price=Decimal("15.00"),
-            stock=25
+            stock=25,
         )
         variant.attribute_values.add(red_value, large_value)
 
@@ -375,7 +353,7 @@ class TestProductVariantModel:
             base_sku="PROD",
             category=category,
             currency="PEN",
-            default_price=Decimal("10.00")
+            default_price=Decimal("10.00"),
         )
 
         # Remove default variant to test clean creation
@@ -386,7 +364,7 @@ class TestProductVariantModel:
             name="No Attr",
             sku="PROD-NO-ATTR",
             price=Decimal("12.00"),
-            stock=15
+            stock=15,
         )
 
         # SKU should match the manually set value
@@ -401,7 +379,7 @@ class TestProductVariantModel:
             base_sku="PROD",
             category=category,
             currency="PEN",
-            default_price=Decimal("10.00")
+            default_price=Decimal("10.00"),
         )
 
         # Remove default variant
@@ -419,7 +397,7 @@ class TestProductVariantModel:
             name="Red",
             sku="PROD-RED",
             price=Decimal("15.00"),
-            stock=10
+            stock=10,
         )
         variant1.attribute_values.add(red_value)
         variant1.refresh_from_db()
@@ -431,7 +409,7 @@ class TestProductVariantModel:
                 name="Another Red",
                 sku=variant1.sku,
                 price=Decimal("20.00"),
-                stock=5
+                stock=5,
             )
 
 
@@ -443,12 +421,20 @@ class TestModelRelationships:
         """Test relationship between category and products"""
         category = Category.objects.create(name="Electronics", description="Test")
         product1 = Product.objects.create(
-            name="Laptop", description="Test", base_sku="LP1", category=category,
-            currency="PEN", default_price=Decimal("1000.00")
+            name="Laptop",
+            description="Test",
+            base_sku="LP1",
+            category=category,
+            currency="PEN",
+            default_price=Decimal("1000.00"),
         )
         product2 = Product.objects.create(
-            name="Phone", description="Test", base_sku="PH1", category=category,
-            currency="PEN", default_price=Decimal("500.00")
+            name="Phone",
+            description="Test",
+            base_sku="PH1",
+            category=category,
+            currency="PEN",
+            default_price=Decimal("500.00"),
         )
 
         assert product1 in category.products.all()
@@ -459,8 +445,12 @@ class TestModelRelationships:
         """Test many-to-many relationship between variants and attribute values"""
         category = Category.objects.create(name="Test", description="Test")
         product = Product.objects.create(
-            name="Test Product", description="Test", base_sku="TEST", category=category,
-            currency="PEN", default_price=Decimal("10.00")
+            name="Test Product",
+            description="Test",
+            base_sku="TEST",
+            category=category,
+            currency="PEN",
+            default_price=Decimal("10.00"),
         )
 
         # Remove default variant
@@ -482,7 +472,11 @@ class TestModelRelationships:
 
         # Create variant with multiple attributes
         variant = ProductVariant.objects.create(
-            product=product, name="Red Cotton", sku="TEST-RED-CTN", price=Decimal("15.00"), stock=20
+            product=product,
+            name="Red Cotton",
+            sku="TEST-RED-CTN",
+            price=Decimal("15.00"),
+            stock=20,
         )
         variant.attribute_values.add(red_value, cotton_value)
 
@@ -500,8 +494,7 @@ class TestModelRelationships:
 def sample_category():
     """Fixture for creating a sample category"""
     return Category.objects.create(
-        name="Test Category",
-        description="A category for testing purposes"
+        name="Test Category", description="A category for testing purposes"
     )
 
 
@@ -515,7 +508,7 @@ def sample_product(sample_category):
         category=sample_category,
         currency="PEN",
         default_price=Decimal("99.99"),
-        default_stock=50
+        default_stock=50,
     )
 
 
@@ -539,10 +532,10 @@ def sample_attributes():
     )
 
     return {
-        'color': color_attr,
-        'size': size_attr,
-        'red': red_value,
-        'blue': blue_value,
-        'small': small_value,
-        'large': large_value
+        "color": color_attr,
+        "size": size_attr,
+        "red": red_value,
+        "blue": blue_value,
+        "small": small_value,
+        "large": large_value,
     }

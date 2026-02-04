@@ -2,10 +2,12 @@ import secrets
 import string
 from django.utils.text import slugify
 
+
 def generate_nonce(length=4):
     """Generates a short, URL-friendly random string."""
     alphabet = string.ascii_lowercase + string.digits
-    return ''.join(secrets.choice(alphabet) for _ in range(length))
+    return "".join(secrets.choice(alphabet) for _ in range(length))
+
 
 def unique_slugify(value):
     """

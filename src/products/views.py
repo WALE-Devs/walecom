@@ -1,13 +1,12 @@
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAdminUser, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
-from django.db.models import Prefetch
 from .models import Product, ProductVariant, ProductImage, Category
 from .serializers import (
-    ProductListSerializer, 
-    ProductDetailSerializer, 
+    ProductListSerializer,
+    ProductDetailSerializer,
     ProductImageSerializer,
-    CategorySerializer
+    CategorySerializer,
 )
 from .filters import ProductFilter
 from .pagination import StandardResultsSetPagination
@@ -17,30 +16,30 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [AllowAny]
-    lookup_field = 'slug'
+    lookup_field = "slug"
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    lookup_field = 'slug'
+    lookup_field = "slug"
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_class = ProductFilter
-    search_fields = ['name', 'description', 'category__name']
+    search_fields = ["name", "description", "category__name"]
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        base_qs = Product.objects.select_related('category')
-        if self.action == 'list':
-            return base_qs.prefetch_related('tags', 'images')
-        return base_qs.prefetch_related('tags', 'images', 'variants')
+        base_qs = Product.objects.select_related("category")
+        if self.action == "list":
+            return base_qs.prefetch_related("tags", "images")
+        return base_qs.prefetch_related("tags", "images", "variants")
 
     def get_permissions(self):
         """Public read, admin-only write."""
-        if self.action in ['list', 'retrieve']:
+        if self.action in ["list", "retrieve"]:
             return [AllowAny()]
         return [IsAdminUser()]
 
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action == "list":
             return ProductListSerializer
         return ProductDetailSerializer
 
@@ -57,11 +56,11 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 
 class ProductImageViewSet(viewsets.ModelViewSet):
-    queryset = ProductImage.objects.select_related('product').order_by('position')
+    queryset = ProductImage.objects.select_related("product").order_by("position")
     serializer_class = ProductImageSerializer
 
     def get_permissions(self):
         """Public read, admin-only write."""
-        if self.action in ['list', 'retrieve']:
+        if self.action in ["list", "retrieve"]:
             return [AllowAny()]
         return [IsAdminUser()]

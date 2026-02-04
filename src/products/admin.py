@@ -14,14 +14,13 @@ class ProductVariantInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'default_price', 'default_stock')
-    list_filter = ('category',)
-    search_fields = ('name', 'base_sku')
+    list_display = ("name", "category", "default_price", "default_stock")
+    list_filter = ("category",)
+    search_fields = ("name", "base_sku")
     inlines = [ProductVariantInline, ProductImageInline]
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'parent')
-    search_fields = ('name',)
-
+    list_display = ("name", "parent")
+    search_fields = ("name",)

@@ -9,39 +9,128 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
+        ("auth", "0012_alter_user_first_name_max_length"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CustomUser',
+            name="CustomUser",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('email', models.EmailField(db_index=True, max_length=254, unique=True)),
-                ('first_name', models.CharField(blank=True, max_length=150)),
-                ('last_name', models.CharField(blank=True, max_length=150)),
-                ('date_of_birth', models.DateField(blank=True, help_text='For age verification and birthday promotions', null=True)),
-                ('phone_number', models.CharField(blank=True, help_text='For order notifications and 2FA', max_length=20, validators=[django.core.validators.RegexValidator('^\\+?1?\\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")])),
-                ('phone_verified', models.BooleanField(default=False)),
-                ('email_verified', models.BooleanField(default=False)),
-                ('newsletter_subscribed', models.BooleanField(default=False, help_text='Marketing emails consent')),
-                ('preferred_language', models.CharField(choices=[('es', 'Español'), ('en', 'English')], default='es', help_text='Preferred language for communications', max_length=10)),
-                ('preferred_currency', models.CharField(choices=[('PEN', 'Peruvian Sol'), ('USD', 'US Dollar')], default='PEN', help_text='Preferred currency for pricing', max_length=3)),
-                ('is_active', models.BooleanField(default=True)),
-                ('is_staff', models.BooleanField(default=False)),
-                ('date_joined', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("password", models.CharField(max_length=128, verbose_name="password")),
+                (
+                    "last_login",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="last login"
+                    ),
+                ),
+                (
+                    "is_superuser",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates that this user has all permissions without explicitly assigning them.",
+                        verbose_name="superuser status",
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(db_index=True, max_length=254, unique=True),
+                ),
+                ("first_name", models.CharField(blank=True, max_length=150)),
+                ("last_name", models.CharField(blank=True, max_length=150)),
+                (
+                    "date_of_birth",
+                    models.DateField(
+                        blank=True,
+                        help_text="For age verification and birthday promotions",
+                        null=True,
+                    ),
+                ),
+                (
+                    "phone_number",
+                    models.CharField(
+                        blank=True,
+                        help_text="For order notifications and 2FA",
+                        max_length=20,
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                "^\\+?1?\\d{9,15}$",
+                                message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
+                            )
+                        ],
+                    ),
+                ),
+                ("phone_verified", models.BooleanField(default=False)),
+                ("email_verified", models.BooleanField(default=False)),
+                (
+                    "newsletter_subscribed",
+                    models.BooleanField(
+                        default=False, help_text="Marketing emails consent"
+                    ),
+                ),
+                (
+                    "preferred_language",
+                    models.CharField(
+                        choices=[("es", "Español"), ("en", "English")],
+                        default="es",
+                        help_text="Preferred language for communications",
+                        max_length=10,
+                    ),
+                ),
+                (
+                    "preferred_currency",
+                    models.CharField(
+                        choices=[("PEN", "Peruvian Sol"), ("USD", "US Dollar")],
+                        default="PEN",
+                        help_text="Preferred currency for pricing",
+                        max_length=3,
+                    ),
+                ),
+                ("is_active", models.BooleanField(default=True)),
+                ("is_staff", models.BooleanField(default=False)),
+                ("date_joined", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "groups",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="The groups this user belongs to. A user will get all permissions granted to each of their groups.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.group",
+                        verbose_name="groups",
+                    ),
+                ),
+                (
+                    "user_permissions",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Specific permissions for this user.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.permission",
+                        verbose_name="user permissions",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'User',
-                'verbose_name_plural': 'Users',
-                'ordering': ['-date_joined'],
-                'indexes': [models.Index(fields=['email'], name='accounts_cu_email_5ce40b_idx'), models.Index(fields=['-date_joined'], name='accounts_cu_date_jo_36131c_idx')],
+                "verbose_name": "User",
+                "verbose_name_plural": "Users",
+                "ordering": ["-date_joined"],
+                "indexes": [
+                    models.Index(fields=["email"], name="accounts_cu_email_5ce40b_idx"),
+                    models.Index(
+                        fields=["-date_joined"], name="accounts_cu_date_jo_36131c_idx"
+                    ),
+                ],
             },
         ),
     ]
