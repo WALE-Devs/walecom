@@ -8,6 +8,7 @@ on:
 
 jobs:
   test:
+    name: CI
     runs-on: ubuntu-latest
     env:
       DJANGO_ENV: test
@@ -61,10 +62,8 @@ jobs:
 
       - name: Run migrations
         working-directory: ./src
-        run: |
-          python manage.py migrate --no-input
+        run: python manage.py migrate --no-input
 
       - name: Run tests
         working-directory: ./src
-        run: |
-          pytest -v --tb=short
+        run: pytest -v --tb=short
