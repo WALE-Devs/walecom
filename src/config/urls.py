@@ -24,6 +24,7 @@ urlpatterns = [
     path("api/products/", include("products.urls")),
     path("api/content/", include("content.urls")),
     path("api/orders/", include("orders.urls")),
+    path("api/docs/", include("docs.urls")),
 ]
 
 # from django.conf import settings
