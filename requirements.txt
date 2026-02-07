@@ -13,3 +13,4 @@ django-filter==25.1
 django-cleanup==9.0.0
 django-storages==1.14.6
 boto3==1.42.36
+drf-spectacular==0.29.0

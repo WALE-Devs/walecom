@@ -21,9 +21,7 @@ class TestContentAPI:
         assert len(response.data) == 1
 
     def test_content_retrieve_public(self, api_client):
-        _ = Content.objects.create(
-            identifier="terms", title="Terms", language="es"
-        )
+        _ = Content.objects.create(identifier="terms", title="Terms", language="es")
         url = reverse("content-detail", kwargs={"identifier": "terms"})
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
