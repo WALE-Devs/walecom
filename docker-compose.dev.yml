@@ -12,7 +12,6 @@ services:
                 python manage.py loaddata content_init &&
                 python manage.py runserver 0.0.0.0:8000"
         depends_on:
-            - db
             - minio
         ports:
             - "${BACKEND_PORT:-8000}:8000"
@@ -21,16 +20,8 @@ services:
         volumes:
             - ./src:/app
 
-    db:
-        container_name: postgres16
-        image: postgres:16
-        restart: unless-stopped
-        ports:
-            - "${DATABASE_PORT:-5432}:5432"
-        env_file:
-            - .env.dev
-        volumes:
-            - postgres_data:/var/lib/postgresql/data
+        networks:
+            - postgres_network
 
     minio:
         container_name: minio
@@ -72,3 +63,8 @@ volumes:
     postgres_data:
     minio_data:
         driver: local
+
+networks:
+    postgres_network:
+        external: true
+        name: postgres_network
